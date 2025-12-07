@@ -13,7 +13,6 @@ const Login = () => {
         </h2>
 
         <form className="flex flex-col gap-5">
-        
           <div className="flex flex-col">
             <label className="text-soft-gray mb-2" htmlFor="email">
               Email Address
@@ -44,7 +43,6 @@ const Login = () => {
             </span>
           </div>
 
-        
           <button
             type="submit"
             className="w-full py-3 bg-primary text-neutral rounded-lg font-semibold hover:bg-[#b9932c] transition"
