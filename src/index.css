@@ -11,13 +11,17 @@
   default: true;
 
 
-  --color-primary: #D4AF37;   /* Gold */
-  --color-secondary: #7D2E2E; /* Maroon */
-  --color-accent: #9E9E9E;    /* Cool Gray */
-  --color-neutral: #1A1A1A;   /* Black */
-  --color-base-100: #ffffff;  /* White BG */
+  --color-primary: #D4AF37;   
+  --color-secondary: #7D2E2E; 
+  --color-accent: #9E9E9E;    
+  --color-neutral: #1A1A1A;  
+  --color-base-100: #ffffff;  
 }
 
 * {
   font-family: "Urbanist", sans-serif;
+}
+
+a.active {
+  @apply text-primary  border-b-2 border-primary font-bold;
 }
