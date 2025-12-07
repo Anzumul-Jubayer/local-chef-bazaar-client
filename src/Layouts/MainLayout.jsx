@@ -5,12 +5,12 @@ import Footer from "../Components/Common/Footer";
 
 const MainLayout = () => {
   return (
-    <div>
-      <Navbar />
-      <div className="pt-24 min-h-[calc(100vh-68px)]">
-        <Outlet />
+    <div className="flex flex-col min-h-screen">
+      <Navbar></Navbar>
+      <div className="flex-1">
+        <Outlet></Outlet>
       </div>
-      <Footer />
+      <Footer></Footer>
     </div>
   );
 };
