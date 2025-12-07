@@ -1,13 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: {
-    light: {
-      "primary": "#D4AF37",
-      "secondary": "#7D2E2E",
-      "accent": "#9E9E9E",
-      "neutral": "#1A1A1A",
-      "base-100": "#ffffff",
-    }
-  }
+  themes: light --default;
+}
+
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+
+
+  --color-primary: #D4AF37;   /* Gold */
+  --color-secondary: #7D2E2E; /* Maroon */
+  --color-accent: #9E9E9E;    /* Cool Gray */
+  --color-neutral: #1A1A1A;   /* Black */
+  --color-base-100: #ffffff;  /* White BG */
+}
+
+* {
+  font-family: "Urbanist", sans-serif;
 }
