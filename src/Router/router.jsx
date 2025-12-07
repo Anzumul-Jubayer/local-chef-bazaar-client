@@ -1,28 +1,43 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
-import Home from "../Pages/Home/Home";
 import MainLayout from "../Layouts/Mainlayout";
-import Login from "../Pages/Auth/Login";
-import Register from "../Pages/Auth/Register";
+
 import Error from "../Pages/Error/Error";
+import LoadingPage from "../Pages/Loading/LoadingPage";
+
+const Home = lazy(() => import("../Pages/Home/Home"));
+const Login = lazy(() => import("../Pages/Auth/Login"));
+const Register = lazy(() => import("../Pages/Auth/Register"));
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    errorElement:<Error/>,
+    errorElement: <Error />,
     children: [
       {
         index: true,
-        element: <Home />,
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <Home />
+          </Suspense>
+        ),
       },
       {
-        path:'/login',
-        element: <Login/> ,
+        path: "login",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <Login />
+          </Suspense>
+        ),
       },
       {
-        path:'/register',
-        element: <Register/> ,
+        path: "register",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <Register />
+          </Suspense>
+        ),
       },
     ],
   },
