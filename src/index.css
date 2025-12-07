@@ -1,4 +1,13 @@
 @import "tailwindcss";
+
 @plugin "daisyui" {
-  themes: light --default;
+  themes: {
+    light: {
+      "primary": "#D4AF37",
+      "secondary": "#7D2E2E",
+      "accent": "#9E9E9E",
+      "neutral": "#1A1A1A",
+      "base-100": "#ffffff",
+    }
+  }
 }
