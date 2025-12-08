@@ -1,14 +1,41 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Helmet } from "react-helmet";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../Context/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const { signIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      await signIn(data.email, data.password);
+      toast.success("Login successful!");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Login failed: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>Login | LocalChefBazaar</title>
       </Helmet>
       <div className="min-h-screen flex items-center justify-center bg-linear-to-r from-[#1A1A1A] to-[#111111] px-4">
@@ -17,7 +44,11 @@ const Login = () => {
             Login to LocalChefBazaar
           </h2>
 
-          <form className="flex flex-col gap-5">
+          <form
+            className="flex flex-col gap-5"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            {/* Email */}
             <div className="flex flex-col">
               <label className="text-soft-gray mb-2" htmlFor="email">
                 Email Address
@@ -27,9 +58,14 @@ const Login = () => {
                 id="email"
                 placeholder="Enter your email"
                 className="p-3 rounded-lg border border-gray-700 bg-neutral text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                {...register("email", { required: "Email is required" })}
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
             </div>
 
+            {/* Password */}
             <div className="flex flex-col relative">
               <label className="text-soft-gray mb-2" htmlFor="password">
                 Password
@@ -39,6 +75,7 @@ const Login = () => {
                 id="password"
                 placeholder="Enter your password"
                 className="p-3 rounded-lg border border-gray-700 bg-neutral text-white focus:outline-none focus:ring-2 focus:ring-primary pr-10"
+                {...register("password", { required: "Password is required" })}
               />
               <span
                 className="absolute right-3 bottom-4 cursor-pointer text-gray-400 hover:text-primary transition"
@@ -46,13 +83,20 @@ const Login = () => {
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
+            {/* Submit */}
             <button
               type="submit"
               className="w-full py-3 bg-primary text-neutral rounded-lg font-semibold hover:bg-[#b9932c] transition"
+              disabled={loading}
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
           </form>
 
