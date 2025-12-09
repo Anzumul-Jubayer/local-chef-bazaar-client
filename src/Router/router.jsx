@@ -4,6 +4,7 @@ import MainLayout from "../Layouts/Mainlayout";
 
 import Error from "../Pages/Error/Error";
 import LoadingPage from "../Pages/Loading/LoadingPage";
+import Meals from "../Pages/Meals/Meals";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Login = lazy(() => import("../Pages/Auth/Login"));
@@ -36,6 +37,15 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingPage />}>
             <Register />
+          </Suspense>
+        ),
+      },
+      
+      {
+        path: "meals",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <Meals/>
           </Suspense>
         ),
       },
