@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet";
 
 const MealDetails = () => {
   const { id } = useParams();
@@ -36,6 +37,10 @@ const MealDetails = () => {
   if (!meal) return null;
 
   return (
+    <>
+    <Helmet>
+        <title>Meal Details | LocalChefBazaar</title>
+      </Helmet>
     <div className="py-12 px-4 bg-neutral min-h-screen">
       <motion.div
         className="max-w-4xl mx-auto bg-neutral/90 rounded-2xl shadow-2xl overflow-hidden"
@@ -68,6 +73,7 @@ const MealDetails = () => {
         </div>
       </motion.div>
     </div>
+    </>
   );
 };
 

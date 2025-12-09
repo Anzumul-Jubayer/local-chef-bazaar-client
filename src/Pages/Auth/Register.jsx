@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 const Register = () => {
   const { createUser, updateProfileFunc } = useContext(AuthContext);
-
+  const navigate=useNavigate()
   const {
     register,
     handleSubmit,
@@ -47,27 +47,28 @@ const Register = () => {
      
       await updateProfileFunc(currentUser, data.name, photoURL);
 
-      // 3️⃣ Backend data save (commented)
-      /*
+      
+      
       const user = {
         name: data.name,
         email: data.email,
         address: data.address,
-        password: data.password, // production এ hashed password use করো
+        password: data.password, 
         photoURL,
         status: "active",
       };
 
-      const saveRes = await fetch("http://localhost:5000/users", {
+      const saveRes = await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
       });
 
       if (!saveRes.ok) throw new Error("Failed to save user");
-      */
+      
 
       toast.success("Registration successful!");
+      navigate('/')
       reset();
     } catch (error) {
       console.error(error);

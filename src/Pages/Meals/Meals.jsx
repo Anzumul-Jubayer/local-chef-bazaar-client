@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 
 const Meals = () => {
   const [meals, setMeals] = useState([]);
@@ -33,8 +34,12 @@ const Meals = () => {
   useEffect(() => {
     fetchMeals();
   }, [page, sortOrder, area, search]);
-
+ 
   return (
+   <>
+     <Helmet>
+        <title>Meals | LocalChefBazaar</title>
+      </Helmet>
     <div className="min-h-screen px-4 py-10 bg-neutral text-white">
       <h2 className="text-3xl font-bold mb-6 text-center">Meals</h2>
 
@@ -119,6 +124,8 @@ const Meals = () => {
         </button>
       </div>
     </div>
+   </>
+   
   );
 };
 
