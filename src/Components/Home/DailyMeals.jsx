@@ -62,7 +62,7 @@ const DailyMeals = () => {
                   className="w-full py-2 bg-primary text-neutral rounded-lg hover:bg-[#b9932c] transition"
                   onClick={() => {
                     
-                    window.location.href = `/meals/${meal._id}`;
+                    window.location.href = `/meal-details/${meal._id}`;
                   }}
                 >
                   See Details

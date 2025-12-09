@@ -91,7 +91,7 @@ const Meals = () => {
               <button
                 className="mt-3 w-full py-2 bg-primary rounded hover:bg-[#b9932c] transition"
                 onClick={() => {
-                  window.location.href = `/meals/${meal._id}`;
+                  window.location.href = `/meal-details/${meal._id}`;
                 }}
               >
                 See Details
