@@ -7,7 +7,7 @@ import { AuthContext } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { user, signOutFunc } = useContext(AuthContext);
+  const { user, signOutFunc,loading } = useContext(AuthContext);
 
   const handleLogout = async () => {
     try {
@@ -88,7 +88,7 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-end flex gap-2 lg:gap-3 items-center">
-          {!user ? (
+          {loading?<span className="loading loading-ring loading-xl text-white"></span>:!user ? (
             <>
               <NavLink
                 to="/login"
