@@ -5,7 +5,7 @@ const Meals = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(6);
-  const [sortOrder, setSortOrder] = useState("asc"); 
+  const [sortOrder, setSortOrder] = useState("asc");
   const [area, setArea] = useState("");
   const [search, setSearch] = useState("");
 
@@ -64,9 +64,11 @@ const Meals = () => {
         </select>
       </div>
 
-     
       {loading ? (
-        <p className="text-center">Loading meals...</p>
+        <p className="text-center">
+          Loading meals{" "}
+          <span className="loading loading-dots loading-xs"></span>
+        </p>
       ) : meals.length === 0 ? (
         <p className="text-center">No meals found.</p>
       ) : (
@@ -83,13 +85,12 @@ const Meals = () => {
               />
               <h3 className="text-xl font-semibold">{meal.foodName}</h3>
               <p>Chef: {meal.chefName}</p>
-              <p>Price: ${meal.price}</p>
+              <p>Price: {meal.price} BDT</p>
               <p>Rating: {meal.rating} ⭐</p>
               <p>Delivery Area: {meal.deliveryArea}</p>
               <button
                 className="mt-3 w-full py-2 bg-primary rounded hover:bg-[#b9932c] transition"
                 onClick={() => {
-                  
                   window.location.href = `/meals/${meal._id}`;
                 }}
               >
@@ -100,7 +101,7 @@ const Meals = () => {
         </div>
       )}
 
-      {/* Pagination */}
+      
       <div className="flex justify-center mt-6 gap-3">
         <button
           className="px-4 py-2 bg-primary rounded disabled:bg-gray-500"
