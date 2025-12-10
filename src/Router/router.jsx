@@ -14,6 +14,8 @@ import MyOrders from "../Pages/Dashboard/UserDashboard/MyOrders";
 import MyReviews from "../Pages/Dashboard/UserDashboard/MyReviews";
 import FavoriteMeals from "../Pages/Dashboard/UserDashboard/FavoriteMeals";
 import UserDashboard from "../Pages/Dashboard/UserDashboard/UserDashboard";
+import Payment from "../Pages/Dashboard/UserDashboard/Payment";
+import PaymentSuccess from "../Pages/Dashboard/UserDashboard/PaymentSuccess";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Login = lazy(() => import("../Pages/Auth/Login"));
@@ -91,6 +93,8 @@ const router = createBrowserRouter([
         children: [
           { path: "profile", element: <MyProfile /> },
           { path: "orders", element: <MyOrders /> },
+          { path: "payment", element: <Payment/> },
+          { path: "payment-success", element: <PaymentSuccess/> },
           { path: "reviews", element: <MyReviews /> },
           { path: "favorites", element: <FavoriteMeals /> },
         ],

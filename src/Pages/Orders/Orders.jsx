@@ -86,7 +86,7 @@ const Orders = () => {
           color: "white",
         });
 
-        navigate("/my-orders");
+        navigate("/dashboard/orders");
       } else {
         toast.error("Error placing order");
       }
