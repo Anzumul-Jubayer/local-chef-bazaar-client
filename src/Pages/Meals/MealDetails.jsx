@@ -162,7 +162,7 @@ const MealDetails = () => {
             <div className="flex gap-3 mt-4">
               <button
                 className="w-full py-3 bg-primary text-neutral rounded-lg font-semibold hover:bg-[#b9932c]"
-                onClick={() => navigate(`/order/${meal._id}`)}
+                onClick={() => navigate(`/orders/${meal._id}`)}
               >
                 Order Now
               </button>

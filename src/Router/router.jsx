@@ -7,6 +7,7 @@ import LoadingPage from "../Pages/Loading/LoadingPage";
 import Meals from "../Pages/Meals/Meals";
 import PrivateRoute from "./PrivateRoute";
 import MealDetails from "../Pages/Meals/MealDetails";
+import Orders from "../Pages/Orders/Orders";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Login = lazy(() => import("../Pages/Auth/Login"));
@@ -57,6 +58,16 @@ const router = createBrowserRouter([
           <Suspense fallback={<LoadingPage />}>
             <PrivateRoute>
               <MealDetails/>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "/orders/:id",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <PrivateRoute>
+              <Orders/>
             </PrivateRoute>
           </Suspense>
         ),
