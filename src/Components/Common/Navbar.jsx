@@ -36,7 +36,7 @@ const Navbar = () => {
 
       {user && (
         <NavLink
-          to="/dashboard"
+          to="dashboard"
           className="lg:mr-8 text-white font-semibold hover:text-primary transition"
         >
           Dashboard

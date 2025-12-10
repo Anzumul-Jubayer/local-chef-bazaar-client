@@ -9,6 +9,12 @@ import PrivateRoute from "./PrivateRoute";
 import MealDetails from "../Pages/Meals/MealDetails";
 import Orders from "../Pages/Orders/Orders";
 
+import MyProfile from "../Pages/Dashboard/UserDashboard/MyProfile";
+import MyOrders from "../Pages/Dashboard/UserDashboard/MyOrders";
+import MyReviews from "../Pages/Dashboard/UserDashboard/MyReviews";
+import FavoriteMeals from "../Pages/Dashboard/UserDashboard/FavoriteMeals";
+import UserDashboard from "../Pages/Dashboard/UserDashboard/UserDashboard";
+
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Login = lazy(() => import("../Pages/Auth/Login"));
 const Register = lazy(() => import("../Pages/Auth/Register"));
@@ -43,12 +49,12 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      
+
       {
         path: "meals",
         element: (
           <Suspense fallback={<LoadingPage />}>
-            <Meals/>
+            <Meals />
           </Suspense>
         ),
       },
@@ -57,7 +63,7 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingPage />}>
             <PrivateRoute>
-              <MealDetails/>
+              <MealDetails />
             </PrivateRoute>
           </Suspense>
         ),
@@ -67,10 +73,27 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingPage />}>
             <PrivateRoute>
-              <Orders/>
+              <Orders />
             </PrivateRoute>
           </Suspense>
         ),
+      },
+      // Dashboard Routes
+      {
+        path: "dashboard",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <PrivateRoute>
+             <UserDashboard/>
+            </PrivateRoute>
+          </Suspense>
+        ),
+        children: [
+          { path: "profile", element: <MyProfile /> },
+          { path: "orders", element: <MyOrders /> },
+          { path: "reviews", element: <MyReviews /> },
+          { path: "favorites", element: <FavoriteMeals /> },
+        ],
       },
     ],
   },
