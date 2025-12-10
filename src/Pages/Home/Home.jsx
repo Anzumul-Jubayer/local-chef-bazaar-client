@@ -3,6 +3,7 @@ import Banner from "../../Components/Home/Banner";
 import ExtraSection from "../../Components/Home/ExtraSection";
 import { Helmet } from "react-helmet";
 import DailyMeals from "../../Components/Home/DailyMeals";
+import DisplayReviews from "../../Components/Home/DisplayReviews";
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
       </Helmet>
       <Banner />
       <DailyMeals/>
+      <DisplayReviews/>
       <ExtraSection />
     </div>
   );
