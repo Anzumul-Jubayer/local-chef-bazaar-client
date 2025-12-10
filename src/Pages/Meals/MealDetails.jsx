@@ -20,9 +20,8 @@ const MealDetails = () => {
     comment: "",
   });
 
-  const imgbbApiKey = "f3c5a5d662d5437946e3078c7e9e3e2b"; 
+  const imgbbApiKey = "f3c5a5d662d5437946e3078c7e9e3e2b";
 
- 
   useEffect(() => {
     const fetchMeal = async () => {
       setLoading(true);
@@ -42,7 +41,6 @@ const MealDetails = () => {
     fetchMeal();
   }, [id, navigate]);
 
- 
   useEffect(() => {
     const loadReviews = async () => {
       const res = await fetch(`http://localhost:3000/reviews/${id}`);
@@ -52,11 +50,9 @@ const MealDetails = () => {
     loadReviews();
   }, [id]);
 
-  
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
 
-    
     const imgForm = new FormData();
     imgForm.append("image", reviewData.reviewerImage);
 
@@ -77,7 +73,6 @@ const MealDetails = () => {
 
     const imageUrl = imgUploadData.data.url;
 
-  
     const newReview = {
       foodId: id,
       reviewerName: reviewData.reviewerName,
@@ -157,6 +152,14 @@ const MealDetails = () => {
             <p className="mb-2">Chef: {meal.chefName}</p>
             <p className="mb-2">Price: {meal.price} BDT</p>
             <p className="mb-2">Rating: {meal.rating} ⭐</p>
+            <p className="mb-2">Ingredients: {meal.ingredients}</p>
+            <p className="mb-2">
+              Estimated Delivery Time: 30 mins
+            </p>
+            <p className="mb-2">
+              Chef's Experience: {meal.chefExperience} years
+            </p>
+
             <p className="mb-2">Delivery Area: {meal.deliveryArea}</p>
 
             <div className="flex gap-3 mt-4">
@@ -177,7 +180,6 @@ const MealDetails = () => {
           </div>
         </motion.div>
 
-       
         <div className="max-w-4xl mx-auto mt-10 text-white">
           <h3 className="text-2xl font-bold mb-3">Reviews</h3>
 
@@ -223,7 +225,6 @@ const MealDetails = () => {
         </div>
       </div>
 
-    
       <AnimatePresence>
         {reviewModal && (
           <motion.div
@@ -241,7 +242,6 @@ const MealDetails = () => {
             >
               <h3 className="text-xl font-bold mb-4">Write a Review</h3>
 
-            
               <input
                 type="text"
                 placeholder="Your Name"
@@ -252,7 +252,6 @@ const MealDetails = () => {
                 required
               />
 
-             
               <input
                 type="file"
                 accept="image/*"
@@ -266,7 +265,6 @@ const MealDetails = () => {
                 required
               />
 
-            
               <input
                 type="number"
                 placeholder="Rating (1–5)"
@@ -279,7 +277,6 @@ const MealDetails = () => {
                 required
               />
 
-           
               <textarea
                 placeholder="Write comment..."
                 className="textarea textarea-bordered w-full mb-3 text-black"
