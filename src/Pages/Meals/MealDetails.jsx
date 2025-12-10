@@ -3,24 +3,30 @@ import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../Context/AuthContext";
+import { useContext } from "react";
+// ধরলাম তুমি auth hook আছে
 
 const MealDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext); // logged-in user
 
   const [meal, setMeal] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [reviewModal, setReviewModal] = useState(false);
 
-  const [reviewData, setReviewData] = useState({
-    reviewerName: "",
-    reviewerImage: "",
-    rating: "",
-    comment: "",
-  });
-
   const imgbbApiKey = "f3c5a5d662d5437946e3078c7e9e3e2b";
+
+  // React Hook Form
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     const fetchMeal = async () => {
@@ -37,7 +43,6 @@ const MealDetails = () => {
         setLoading(false);
       }
     };
-
     fetchMeal();
   }, [id, navigate]);
 
@@ -50,11 +55,13 @@ const MealDetails = () => {
     loadReviews();
   }, [id]);
 
-  const handleReviewSubmit = async (e) => {
-    e.preventDefault();
+  // Review Submit
+  const onSubmitReview = async (formData) => {
+    if (!user) return toast.error("You must be logged in to review!");
 
+    // Upload image to imgbb
     const imgForm = new FormData();
-    imgForm.append("image", reviewData.reviewerImage);
+    imgForm.append("image", formData.reviewerImage[0]);
 
     const imgUploadRes = await fetch(
       `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
@@ -65,7 +72,6 @@ const MealDetails = () => {
     );
 
     const imgUploadData = await imgUploadRes.json();
-
     if (!imgUploadData.success) {
       toast.error("Image upload failed!");
       return;
@@ -75,10 +81,11 @@ const MealDetails = () => {
 
     const newReview = {
       foodId: id,
-      reviewerName: reviewData.reviewerName,
+      reviewerName: user.displayName,
+      reviewerEmail: user.email, 
       reviewerImage: imageUrl,
-      rating: reviewData.rating,
-      comment: reviewData.comment,
+      rating: formData.rating,
+      comment: formData.comment,
       date: new Date(),
     };
 
@@ -89,17 +96,20 @@ const MealDetails = () => {
     });
 
     const data = await res.json();
-
     if (data.success) {
       toast.success("Review submitted!");
       setReviews([data.data, ...reviews]);
       setReviewModal(false);
+      reset();
     }
   };
 
+  // Add to Favorites
   const addToFavorites = async () => {
+    if (!user) return toast.error("You must be logged in to add favorites!");
+
     const favoriteData = {
-      userEmail: "test@example.com",
+      userEmail: user.email,
       mealId: meal._id,
       mealName: meal.foodName,
       chefId: meal.chefId,
@@ -115,17 +125,14 @@ const MealDetails = () => {
     });
 
     const data = await res.json();
-
     if (data.success) toast.success("Added to Favorites");
     else toast.error(data.message);
   };
 
-  if (loading) {
+  if (loading)
     return (
       <p className="text-center text-white mt-20">Loading meal details...</p>
     );
-  }
-
   if (!meal) return null;
 
   return (
@@ -153,13 +160,10 @@ const MealDetails = () => {
             <p className="mb-2">Price: {meal.price} BDT</p>
             <p className="mb-2">Rating: {meal.rating} ⭐</p>
             <p className="mb-2">Ingredients: {meal.ingredients}</p>
-            <p className="mb-2">
-              Estimated Delivery Time: 30 mins
-            </p>
+            <p className="mb-2">Estimated Delivery Time: 30 mins</p>
             <p className="mb-2">
               Chef's Experience: {meal.chefExperience} years
             </p>
-
             <p className="mb-2">Delivery Area: {meal.deliveryArea}</p>
 
             <div className="flex gap-3 mt-4">
@@ -214,7 +218,6 @@ const MealDetails = () => {
                   </div>
 
                   <p className="mt-2 text-gray-300">{review.comment}</p>
-
                   <p className="text-gray-400 text-sm mt-1">
                     {new Date(review.date).toLocaleString()}
                   </p>
@@ -234,36 +237,34 @@ const MealDetails = () => {
             exit={{ opacity: 0 }}
           >
             <motion.form
-              onSubmit={handleReviewSubmit}
+              onSubmit={handleSubmit(onSubmitReview)}
               className="bg-neutral p-6 rounded-xl w-96 text-white"
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
             >
               <h3 className="text-xl font-bold mb-4">Write a Review</h3>
-
+              {/* Reviewer Name */}
               <input
                 type="text"
-                placeholder="Your Name"
+                {...register("reviewerName")}
+                value={user?.displayName || ""}
                 className="input input-bordered w-full mb-3 text-black"
-                onChange={(e) =>
-                  setReviewData({ ...reviewData, reviewerName: e.target.value })
-                }
-                required
+                readOnly
               />
 
+              {/* Image Upload */}
               <input
                 type="file"
                 accept="image/*"
                 className="file-input file-input-bordered w-full mb-3 text-black"
-                onChange={(e) =>
-                  setReviewData({
-                    ...reviewData,
-                    reviewerImage: e.target.files[0],
-                  })
-                }
-                required
+                {...register("reviewerImage", { required: true })}
               />
+              {errors.reviewerImage && (
+                <span className="text-red-500 text-sm">Image is required</span>
+              )}
+
+              {/* Rating */}
 
               <input
                 type="number"
@@ -271,20 +272,25 @@ const MealDetails = () => {
                 className="input input-bordered w-full mb-3 text-black"
                 min="1"
                 max="5"
-                onChange={(e) =>
-                  setReviewData({ ...reviewData, rating: e.target.value })
-                }
-                required
+                {...register("rating", { required: true, min: 1, max: 5 })}
               />
+              {errors.rating && (
+                <span className="text-red-500 text-sm">
+                  Valid rating is required
+                </span>
+              )}
 
+              {/* Comment */}
               <textarea
                 placeholder="Write comment..."
                 className="textarea textarea-bordered w-full mb-3 text-black"
-                onChange={(e) =>
-                  setReviewData({ ...reviewData, comment: e.target.value })
-                }
-                required
+                {...register("comment", { required: true })}
               ></textarea>
+              {errors.comment && (
+                <span className="text-red-500 text-sm">
+                  Comment is required
+                </span>
+              )}
 
               <div className="flex justify-end gap-3">
                 <button className="px-4 py-2 bg-primary rounded-lg">

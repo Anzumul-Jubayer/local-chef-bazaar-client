@@ -64,8 +64,8 @@ const Meals = () => {
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
         >
-          <option value="asc">Price Low → High</option>
-          <option value="desc">Price High → Low</option>
+          <option className="text-black" value="asc">Price Low → High</option>
+          <option className="text-black"  value="desc">Price High → Low</option>
         </select>
       </div>
 
