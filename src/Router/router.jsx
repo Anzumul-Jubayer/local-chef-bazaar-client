@@ -107,6 +107,7 @@ const router = createBrowserRouter([
           { path: "favorites", element: <FavoriteMeals /> },
         ],
       },
+      // Chef Dashboard
       {
         path: "chef-dashboard",
         element: (
