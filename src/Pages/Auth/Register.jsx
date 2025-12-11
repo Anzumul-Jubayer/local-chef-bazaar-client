@@ -56,6 +56,7 @@ const Register = () => {
         password: data.password, 
         photoURL,
         status: "active",
+        role:'user'
       };
 
       const saveRes = await fetch("http://localhost:3000/users", {

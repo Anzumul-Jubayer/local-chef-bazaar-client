@@ -30,7 +30,7 @@ const MyProfile = () => {
   const handleRequest = async (type) => {
     const requestPayload = {
       _id: userData._id,
-      userName: userData.displayName || userData.userName,
+      userName: userData.displayName || userData.name,
       userEmail: userData.email,
       requestType: type, // "chef" or "admin"
       requestStatus: "pending",
@@ -72,7 +72,7 @@ const MyProfile = () => {
             className="w-24 h-24 rounded-full border border-primary object-cover"
           />
           <h3 className="text-xl font-semibold">
-            {userData.displayName || userData.userName}
+            {userData.displayName || userData.name}
           </h3>
           <p className="text-gray-400">{userData.email}</p>
         </div>

@@ -1,4 +1,4 @@
-// src/components/Footer.jsx
+
 import React from "react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 
