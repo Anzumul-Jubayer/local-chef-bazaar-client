@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
 
 const ManageRequests = () => {
@@ -57,7 +58,11 @@ const ManageRequests = () => {
   };
 
   return (
-    <div className="p-4">
+    <>
+    <Helmet>
+      <title>Manage request | Local chef Bazar</title>
+    </Helmet>
+     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Manage Role Requests</h2>
       <table className="table-auto w-full border">
         <thead>
@@ -109,6 +114,8 @@ const ManageRequests = () => {
         </tbody>
       </table>
     </div>
+    </>
+    
   );
 };
 

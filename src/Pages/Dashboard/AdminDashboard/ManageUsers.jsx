@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import toast from "react-hot-toast";
 
 const ManageUsers = () => {
@@ -55,6 +56,10 @@ const ManageUsers = () => {
   if (loading) return <p className="text-center mt-10">Loading users...</p>;
 
   return (
+   <>
+   <Helmet>
+      <title>Manage user | Local chef Bazar</title>
+    </Helmet>
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Manage Users</h2>
       <div className="overflow-x-auto">
@@ -98,6 +103,7 @@ const ManageUsers = () => {
         </table>
       </div>
     </div>
+   </>
   );
 };
 
