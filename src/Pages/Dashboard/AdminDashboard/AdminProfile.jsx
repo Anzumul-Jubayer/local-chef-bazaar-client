@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 
-const ChefProfile = () => {
+const AdminProfile = () => {
   const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState(null);
 
@@ -32,7 +32,7 @@ const ChefProfile = () => {
       userId: userData._id,
       userName: userData.displayName || userData.name,
       userEmail: userData.email,
-      requestType: type, // "chef" or "admin"
+      requestType: type, // "admin" or "chef"
     };
 
     try {
@@ -57,7 +57,7 @@ const ChefProfile = () => {
   return (
     <>
       <Helmet>
-        <title>Chef Profile | LocalChefBazaar</title>
+        <title>Admin Profile | LocalChefBazaar</title>
       </Helmet>
 
       <div className="min-h-screen bg-neutral text-white py-8 px-4 sm:px-6 lg:px-8">
@@ -67,14 +67,14 @@ const ChefProfile = () => {
           animate={{ opacity: 1, y: 0 }}
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4 text-primary">
-            Chef Profile
+            Admin Profile
           </h2>
 
           {/* Profile Image & Info */}
           <div className="flex flex-col items-center gap-4">
             <img
               src={userData.photoURL || "/default-avatar.png"}
-              alt="Chef"
+              alt="Admin"
               className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border border-primary object-cover"
             />
             <h3 className="text-xl sm:text-2xl font-semibold">
@@ -97,38 +97,14 @@ const ChefProfile = () => {
               <span className="font-semibold">Status:</span>{" "}
               {userData.status || "active"}
             </p>
-            {userData.role === "chef" && (
-              <p>
-                <span className="font-semibold">Chef ID:</span>{" "}
-                {userData.chefId}
-              </p>
-            )}
+            
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6 w-full">
-            {userData.role !== "chef" && userData.role !== "admin" && (
-              <button
-                onClick={() => handleRequest("chef")}
-                className="w-full sm:w-auto px-6 py-2 bg-primary text-neutral rounded-lg font-semibold hover:bg-[#b9932c] transition"
-              >
-                Be a Chef
-              </button>
-            )}
-
-            {userData.role !== "admin" && (
-              <button
-                onClick={() => handleRequest("admin")}
-                className="w-full sm:w-auto px-6 py-2 bg-yellow-600 text-neutral rounded-lg font-semibold hover:bg-yellow-700 transition"
-              >
-                Be an Admin
-              </button>
-            )}
-          </div>
+         
         </motion.div>
       </div>
     </>
   );
 };
 
-export default ChefProfile;
+export default AdminProfile;

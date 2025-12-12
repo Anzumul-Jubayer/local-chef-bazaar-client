@@ -23,6 +23,12 @@ import CreateMeal from "../Pages/Dashboard/ChefDashboard/CreateMeal";
 import MyMeals from "../Pages/Dashboard/ChefDashboard/MyMeals";
 import OrderRequests from "../Pages/Dashboard/ChefDashboard/OrderRequests";
 import ChefDashboardLayout from "../Layouts/ChefDashboardLayout";
+import AdminRoute from "./AdminRoute";
+import AdminDashboard from "../Pages/Dashboard/AdminDashboard/AdminDashboard";
+import AdminProfile from "../Pages/Dashboard/AdminDashboard/AdminProfile";
+import ManageUsers from "../Pages/Dashboard/AdminDashboard/ManageUsers";
+import ManageRequests from "../Pages/Dashboard/AdminDashboard/ManageRequests";
+import PlatformStatistics from "../Pages/Dashboard/AdminDashboard/PlatformStatistics";
 
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Login = lazy(() => import("../Pages/Auth/Login"));
@@ -111,9 +117,12 @@ const router = createBrowserRouter([
       {
         path: "chef-dashboard",
         element: (
+          <Suspense fallback={<LoadingPage/>}>
             <ChefRoute>
                <ChefDashboard />
             </ChefRoute>
+          </Suspense>
+            
             
           
         ),
@@ -122,6 +131,22 @@ const router = createBrowserRouter([
           { path: "create-meals", element: <CreateMeal /> },
           { path: "my-meals", element: <MyMeals /> },
           { path: "order-request", element: <OrderRequests /> },
+        ],
+      },
+      // Admin Dashboard
+      {
+        path: "admin-dashboard",
+        element: (
+           <AdminRoute>
+             <AdminDashboard/>
+           </AdminRoute>   
+          
+        ),
+        children: [
+          { path: "admin-profile", element: <AdminProfile/> },
+          { path: "manage-user", element: <ManageUsers /> },
+          { path: "manage-request", element: <ManageRequests /> },
+          { path: "statistics", element: <PlatformStatistics/> },
         ],
       },
     ],

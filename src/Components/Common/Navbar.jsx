@@ -84,6 +84,14 @@ const Navbar = () => {
           Chef Dashboard
         </NavLink>
       )}
+      {user && role === "admin" && (
+        <NavLink
+          to="/admin-dashboard"
+          className="lg:mr-8 text-white font-semibold hover:text-primary transition"
+        >
+          Admin Dashboard
+        </NavLink>
+      )}
     </>
   );
 

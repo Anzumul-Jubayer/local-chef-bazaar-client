@@ -47,15 +47,7 @@ const MyOrders = () => {
             <p><span className="font-semibold">Chef ID:</span> {order.chefId}</p>
             <p><span className="font-semibold">Payment Status:</span> {order.paymentStatus}</p>
 
-            {/* {order.orderStatus === "accepted" && order.paymentStatus === "pending" && (
-              <button
-                onClick={() => handlePay(order._id, order.price)}
-                className="mt-4 w-full py-2 bg-green-600 text-neutral rounded-lg font-semibold hover:bg-green-700"
-              >
-                Pay
-              </button>
-            )} */}
-            {  (
+            {order.orderStatus === "accepted" && order.paymentStatus.toLowerCase()  === "pending" && (
               <button
                 onClick={() => handlePay(order._id, order.price)}
                 className="mt-4 w-full py-2 bg-green-600 text-neutral rounded-lg font-semibold hover:bg-green-700"
@@ -63,6 +55,7 @@ const MyOrders = () => {
                 Pay
               </button>
             )}
+            
           </div>
         ))}
       </div>
