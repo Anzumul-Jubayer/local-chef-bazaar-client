@@ -17,19 +17,18 @@ const PlatformStatistics = () => {
   const [ordersData, setOrdersData] = useState([]);
   const [totalPayment, setTotalPayment] = useState(0);
 
-  
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   useEffect(() => {
     // Fetch total users
-    fetch("http://localhost:3000/users")
+    fetch("https://local-chef-bazaar-server-flame.vercel.app/users")
       .then((res) => res.json())
       .then((usersArray) => {
         setTotalUsers(usersArray.length);
       })
       .catch((err) => console.error(err));
 
-    fetch("http://localhost:3000/orders")
+    fetch("https://local-chef-bazaar-server-flame.vercel.app/orders")
       .then((res) => res.json())
       .then((data) => {
         const orders = data.data;
@@ -39,7 +38,7 @@ const PlatformStatistics = () => {
           (sum, order) => sum + (order.paymentInfo?.amount || 0),
           0
         );
-        console.log(total)
+        console.log(total);
         setTotalPayment(total);
       });
   }, []);
@@ -57,9 +56,9 @@ const PlatformStatistics = () => {
 
   return (
     <>
-    <Helmet>
-      <title>Platform Statistics | Local chef Bazar</title>
-    </Helmet>
+      <Helmet>
+        <title>Platform Statistics | Local chef Bazar</title>
+      </Helmet>
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4">Platform Statistics</h2>
 

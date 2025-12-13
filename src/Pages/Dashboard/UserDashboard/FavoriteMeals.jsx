@@ -11,7 +11,9 @@ const MyFavorites = () => {
   const fetchFavorites = async () => {
     if (!user) return;
     try {
-      const res = await fetch(`http://localhost:3000/favorites/${user.email}`);
+      const res = await fetch(
+        `https://local-chef-bazaar-server-flame.vercel.app/favorites/${user.email}`
+      );
       const data = await res.json();
       if (data.success) setFavorites(data.data);
     } catch (error) {
@@ -36,9 +38,12 @@ const MyFavorites = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await fetch(`http://localhost:3000/favorites/${id}`, {
-            method: "DELETE",
-          });
+          const res = await fetch(
+            `https://local-chef-bazaar-server-flame.vercel.app/favorites/${id}`,
+            {
+              method: "DELETE",
+            }
+          );
           const data = await res.json();
           if (data.success) {
             toast.success("Meal removed from favorites successfully!");
@@ -127,7 +132,6 @@ const MyFavorites = () => {
             </table>
           </div>
         )}
-        
       </div>
     </>
   );

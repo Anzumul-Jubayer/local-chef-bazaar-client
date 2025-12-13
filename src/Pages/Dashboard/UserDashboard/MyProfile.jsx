@@ -11,7 +11,9 @@ const MyProfile = () => {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/users/${user?.email}`);
+        const res = await fetch(
+          `https://local-chef-bazaar-server-flame.vercel.app/users/${user?.email}`
+        );
         const data = await res.json();
         if (data.success) setUserData(data.data);
         else toast.error(data.message);
@@ -36,11 +38,14 @@ const MyProfile = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/role-requests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestPayload),
-      });
+      const res = await fetch(
+        "https://local-chef-bazaar-server-flame.vercel.app/role-requests",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestPayload),
+        }
+      );
 
       const data = await res.json();
 
@@ -80,7 +85,9 @@ const MyProfile = () => {
             <h3 className="text-lg sm:text-xl font-semibold">
               {userData.displayName || userData.name}
             </h3>
-            <p className="text-gray-400 text-sm sm:text-base">{userData.email}</p>
+            <p className="text-gray-400 text-sm sm:text-base">
+              {userData.email}
+            </p>
           </div>
 
           {/* Details */}

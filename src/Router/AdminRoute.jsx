@@ -18,7 +18,7 @@ const AdminRoute = ({ children }) => {
 
       try {
         const res = await fetch(
-          `http://localhost:3000/users/role/${user.email}`
+          `https://local-chef-bazaar-server-flame.vercel.app/users/role/${user.email}`
         );
         const data = await res.json();
 

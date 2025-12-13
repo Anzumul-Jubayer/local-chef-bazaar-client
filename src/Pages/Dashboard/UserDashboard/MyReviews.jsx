@@ -10,14 +10,15 @@ const MyReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentReview, setCurrentReview] = useState({});
-  const { user } = useContext(AuthContext); 
+  const { user } = useContext(AuthContext);
 
-  
   const fetchReviews = async () => {
-    if (!user?.email) return; 
+    if (!user?.email) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/reviews/user/${user.email}`);
+      const res = await fetch(
+        `https://local-chef-bazaar-server-flame.vercel.app/reviews/user/${user.email}`
+      );
       const data = await res.json();
       if (data.success) setReviews(data.data);
     } catch (err) {
@@ -30,58 +31,59 @@ const MyReviews = () => {
     fetchReviews();
   }, [user]);
 
-  
-
-const handleDelete = async (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-    cancelButtonText: "Cancel",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const res = await fetch(`http://localhost:3000/reviews/${id}`, {
-          method: "DELETE",
-        });
-        const data = await res.json();
-        if (data.success) {
-          Swal.fire("Deleted!", "Your review has been deleted.", "success");
-          fetchReviews();
-        } else {
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(
+            `https://local-chef-bazaar-server-flame.vercel.app/reviews/${id}`,
+            {
+              method: "DELETE",
+            }
+          );
+          const data = await res.json();
+          if (data.success) {
+            Swal.fire("Deleted!", "Your review has been deleted.", "success");
+            fetchReviews();
+          } else {
+            Swal.fire("Error!", "Failed to delete review.", "error");
+          }
+        } catch (err) {
+          console.error(err);
           Swal.fire("Error!", "Failed to delete review.", "error");
         }
-      } catch (err) {
-        console.error(err);
-        Swal.fire("Error!", "Failed to delete review.", "error");
       }
-    }
-  });
-};
+    });
+  };
 
-
- 
   const openUpdateModal = (review) => {
     setCurrentReview(review);
     setModalIsOpen(true);
   };
 
-  
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`http://localhost:3000/reviews/${currentReview._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          rating: currentReview.rating,
-          comment: currentReview.comment,
-        }),
-      });
+      const res = await fetch(
+        `https://local-chef-bazaar-server-flame.vercel.app/reviews/${currentReview._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            rating: currentReview.rating,
+            comment: currentReview.comment,
+          }),
+        }
+      );
       const data = await res.json();
       if (data.success) {
         toast.success("Review updated!");
@@ -104,16 +106,25 @@ const handleDelete = async (id) => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {reviews.map((review) => (
-            <div key={review._id} className="p-4 border rounded-lg bg-gray-800 text-white">
+            <div
+              key={review._id}
+              className="p-4 border rounded-lg bg-gray-800 text-white"
+            >
               <h2 className="font-semibold">{review.mealName}</h2>
               <p>Rating: {review.rating}</p>
               <p>Comment: {review.comment}</p>
               <p>Date: {new Date(review.date).toLocaleDateString()}</p>
               <div className="mt-2 flex gap-2">
-                <button onClick={() => handleDelete(review._id)} className="bg-red-600 px-2 py-1 rounded">
+                <button
+                  onClick={() => handleDelete(review._id)}
+                  className="bg-red-600 px-2 py-1 rounded"
+                >
                   Delete
                 </button>
-                <button onClick={() => openUpdateModal(review)} className="bg-blue-600 px-2 py-1 rounded">
+                <button
+                  onClick={() => openUpdateModal(review)}
+                  className="bg-blue-600 px-2 py-1 rounded"
+                >
                   Update
                 </button>
               </div>
@@ -122,7 +133,6 @@ const handleDelete = async (id) => {
         </div>
       )}
 
-      
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -135,18 +145,26 @@ const handleDelete = async (id) => {
             min="1"
             max="5"
             value={currentReview.rating || ""}
-            onChange={(e) => setCurrentReview({ ...currentReview, rating: e.target.value })}
+            onChange={(e) =>
+              setCurrentReview({ ...currentReview, rating: e.target.value })
+            }
             placeholder="Rating (1-5)"
             className="p-2 rounded text-white"
           />
           <textarea
             value={currentReview.comment || ""}
-            onChange={(e) => setCurrentReview({ ...currentReview, comment: e.target.value })}
+            onChange={(e) =>
+              setCurrentReview({ ...currentReview, comment: e.target.value })
+            }
             placeholder="Comment"
             className="p-2 rounded text-white"
           />
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={() => setModalIsOpen(false)} className="bg-gray-600 px-4 py-2 rounded">
+            <button
+              type="button"
+              onClick={() => setModalIsOpen(false)}
+              className="bg-gray-600 px-4 py-2 rounded"
+            >
               Cancel
             </button>
             <button type="submit" className="bg-green-600 px-4 py-2 rounded">

@@ -16,7 +16,9 @@ const OrderRequests = () => {
 
     const fetchUserChefId = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/users/${user.email}`);
+        const res = await fetch(
+          `https://local-chef-bazaar-server-flame.vercel.app/users/${user.email}`
+        );
         if (!res.ok) throw new Error("Failed to fetch user data");
         const data = await res.json();
 
@@ -42,7 +44,9 @@ const OrderRequests = () => {
 
     const fetchOrders = async () => {
       try {
-        const res = await fetch("http://localhost:3000/orders");
+        const res = await fetch(
+          "https://local-chef-bazaar-server-flame.vercel.app/orders"
+        );
         if (!res.ok) throw new Error("Failed to fetch orders");
 
         const data = await res.json();
@@ -69,7 +73,7 @@ const OrderRequests = () => {
   const updateStatus = async (orderId, newStatus) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/update-order-status/${orderId}`,
+        `https://local-chef-bazaar-server-flame.vercel.app/update-order-status/${orderId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

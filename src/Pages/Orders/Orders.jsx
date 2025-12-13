@@ -19,7 +19,9 @@ const Orders = () => {
   useEffect(() => {
     const loadMeal = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/meal-details/${id}`);
+        const res = await fetch(
+          `https://local-chef-bazaar-server-flame.vercel.app/meal-details/${id}`
+        );
         const data = await res.json();
         setMeal(data);
       } catch (err) {
@@ -69,11 +71,14 @@ const Orders = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      });
+      const res = await fetch(
+        "https://local-chef-bazaar-server-flame.vercel.app/orders",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       const data = await res.json();
 

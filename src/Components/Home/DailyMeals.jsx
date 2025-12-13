@@ -8,9 +8,11 @@ const DailyMeals = () => {
   const fetchMeals = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/meals?limit=6&page=1");
+      const res = await fetch(
+        "https://local-chef-bazaar-server-flame.vercel.app/meals?limit=6&page=1"
+      );
       const data = await res.json();
-      setMeals(data.data); 
+      setMeals(data.data);
     } catch (error) {
       console.error("Error fetching meals:", error);
     } finally {
@@ -61,7 +63,6 @@ const DailyMeals = () => {
                 <button
                   className="w-full py-2 bg-primary text-neutral rounded-lg hover:bg-[#b9932c] transition"
                   onClick={() => {
-                    
                     window.location.href = `/meal-details/${meal._id}`;
                   }}
                 >

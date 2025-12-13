@@ -27,11 +27,14 @@ const CheckoutForm = () => {
     if (!stripe || !elements) return;
 
     try {
-      const res = await fetch("http://localhost:3000/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: Math.round(Number(amount) * 100) }),
-      });
+      const res = await fetch(
+        "https://local-chef-bazaar-server-flame.vercel.app/create-payment-intent",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: Math.round(Number(amount) * 100) }),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to create payment intent");
       const { clientSecret } = await res.json();
@@ -53,11 +56,14 @@ const CheckoutForm = () => {
       if (paymentIntent.status === "succeeded") {
         toast.success("Payment successful!");
 
-        await fetch(`http://localhost:3000/orders/${orderId}/payment`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ paymentInfo: paymentIntent }),
-        });
+        await fetch(
+          `https://local-chef-bazaar-server-flame.vercel.app/orders/${orderId}/payment`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ paymentInfo: paymentIntent }),
+          }
+        );
 
         navigate("/dashboard/payment-success");
       }
@@ -69,9 +75,9 @@ const CheckoutForm = () => {
 
   return (
     <>
-    <Helmet>
-      <title>Payment | LocalChefBazar</title>
-    </Helmet>
+      <Helmet>
+        <title>Payment | LocalChefBazar</title>
+      </Helmet>
       <div className="min-h-screen flex items-center justify-center bg-neutral text-white">
         <form
           className="bg-neutral/80 p-8 rounded-xl w-full max-w-md"

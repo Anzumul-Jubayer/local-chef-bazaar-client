@@ -6,10 +6,9 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AuthContext } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
 
-
 const Register = () => {
   const { createUser, updateProfileFunc } = useContext(AuthContext);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -25,11 +24,10 @@ const Register = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      
       const formData = new FormData();
       formData.append("image", data.profile[0]);
 
-      const apiKey = "f3c5a5d662d5437946e3078c7e9e3e2b"; 
+      const apiKey = "f3c5a5d662d5437946e3078c7e9e3e2b";
       const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
         method: "POST",
         body: formData,
@@ -40,36 +38,34 @@ const Register = () => {
 
       const photoURL = result.data.url;
 
-     
       const userCredential = await createUser(data.email, data.password);
       const currentUser = userCredential.user;
 
-     
       await updateProfileFunc(currentUser, data.name, photoURL);
 
-      
-      
       const user = {
         name: data.name,
         email: data.email,
         address: data.address,
-        password: data.password, 
+        password: data.password,
         photoURL,
         status: "active",
-        role:'user'
+        role: "user",
       };
 
-      const saveRes = await fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-      });
+      const saveRes = await fetch(
+        "https://local-chef-bazaar-server-flame.vercel.app/users",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user),
+        }
+      );
 
       if (!saveRes.ok) throw new Error("Failed to save user");
-      
 
       toast.success("Registration successful!");
-      navigate('/')
+      navigate("/");
       reset();
     } catch (error) {
       console.error(error);
@@ -91,7 +87,10 @@ const Register = () => {
             Register at LocalChefBazaar
           </h2>
 
-          <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="flex flex-col gap-5"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             {/* Full Name */}
             <div className="flex flex-col">
               <label className="text-soft-gray mb-2">Full Name</label>
@@ -100,7 +99,9 @@ const Register = () => {
                 className="p-3 rounded-lg border border-gray-700 bg-neutral text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 {...register("name", { required: "Name is required" })}
               />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name.message}</p>
+              )}
             </div>
 
             {/* Email */}
@@ -112,7 +113,9 @@ const Register = () => {
                 className="p-3 rounded-lg border border-gray-700 bg-neutral text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 {...register("email", { required: "Email is required" })}
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
             </div>
 
             {/* Profile Image */}
@@ -122,9 +125,13 @@ const Register = () => {
                 type="file"
                 accept="image/*"
                 className="p-2 rounded-lg border border-gray-700 bg-neutral text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                {...register("profile", { required: "Profile image is required" })}
+                {...register("profile", {
+                  required: "Profile image is required",
+                })}
               />
-              {errors.profile && <p className="text-red-500 text-sm">{errors.profile.message}</p>}
+              {errors.profile && (
+                <p className="text-red-500 text-sm">{errors.profile.message}</p>
+              )}
             </div>
 
             {/* Address */}
@@ -135,7 +142,9 @@ const Register = () => {
                 className="p-3 rounded-lg border border-gray-700 bg-neutral text-white focus:outline-none focus:ring-2 focus:ring-primary"
                 {...register("address", { required: "Address is required" })}
               />
-              {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
+              {errors.address && (
+                <p className="text-red-500 text-sm">{errors.address.message}</p>
+              )}
             </div>
 
             {/* Password */}
@@ -161,7 +170,11 @@ const Register = () => {
               >
                 {showPass ? <FaEyeSlash /> : <FaEye />}
               </span>
-              {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             {/* Confirm Password */}
@@ -184,7 +197,9 @@ const Register = () => {
                 {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
               </span>
               {errors.confirmPassword && (
-                <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.confirmPassword.message}
+                </p>
               )}
             </div>
 
@@ -200,7 +215,10 @@ const Register = () => {
 
           <p className="text-white mt-5 text-center">
             Already have an account?{" "}
-            <Link to="/login" className="text-primary font-semibold hover:underline">
+            <Link
+              to="/login"
+              className="text-primary font-semibold hover:underline"
+            >
               Login here
             </Link>
           </p>

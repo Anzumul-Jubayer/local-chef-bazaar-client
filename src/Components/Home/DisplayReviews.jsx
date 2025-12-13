@@ -8,7 +8,9 @@ const DisplayReviews = () => {
   useEffect(() => {
     const loadReviews = async () => {
       try {
-        const res = await fetch("http://localhost:3000/reviews");
+        const res = await fetch(
+          "https://local-chef-bazaar-server-flame.vercel.app/reviews"
+        );
         const data = await res.json();
 
         if (data.success) {
@@ -35,7 +37,6 @@ const DisplayReviews = () => {
       className="py-16 px-4 bg-linear-to-b from-[#121212] via-[#1a1a1a] to-[#0d0d0d] 
     relative overflow-hidden"
     >
-     
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-10 left-10 w-60 h-60 bg-yellow-600/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-10 right-10 w-72 h-72 bg-yellow-500/10 rounded-full blur-3xl"></div>

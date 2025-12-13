@@ -54,11 +54,14 @@ const CreateMeal = () => {
         createdAt: new Date(),
       };
 
-      const res = await fetch("http://localhost:3000/meals", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(meal),
-      });
+      const res = await fetch(
+        "https://local-chef-bazaar-server-flame.vercel.app/meals",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(meal),
+        }
+      );
 
       const result = await res.json();
 
@@ -83,10 +86,8 @@ const CreateMeal = () => {
 
       {/* Main Wrapper */}
       <div className="min-h-screen bg-neutral text-white py-8 px-4 overflow-x-hidden">
-
         {/* Card Container */}
         <div className="max-w-3xl w-full mx-auto bg-neutral/80 p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-700">
-
           <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-primary">
             Create Meal
           </h2>
@@ -103,7 +104,9 @@ const CreateMeal = () => {
                 {...register("foodName", { required: true })}
                 className="p-2 rounded text-black bg-gray-200 w-full"
               />
-              {errors.foodName && <span className="text-red-500">Required</span>}
+              {errors.foodName && (
+                <span className="text-red-500">Required</span>
+              )}
             </div>
 
             {/* Chef Name */}
@@ -114,7 +117,9 @@ const CreateMeal = () => {
                 {...register("chefName", { required: true })}
                 className="p-2 rounded text-black bg-gray-200 w-full"
               />
-              {errors.chefName && <span className="text-red-500">Required</span>}
+              {errors.chefName && (
+                <span className="text-red-500">Required</span>
+              )}
             </div>
 
             {/* Food Image */}
@@ -157,18 +162,24 @@ const CreateMeal = () => {
 
             {/* Ingredients */}
             <div className="flex flex-col">
-              <label className="mb-1 font-semibold">Ingredients (comma separated)</label>
+              <label className="mb-1 font-semibold">
+                Ingredients (comma separated)
+              </label>
               <input
                 type="text"
                 {...register("ingredients", { required: true })}
                 className="p-2 rounded text-black bg-gray-200 w-full"
               />
-              {errors.ingredients && <span className="text-red-500">Required</span>}
+              {errors.ingredients && (
+                <span className="text-red-500">Required</span>
+              )}
             </div>
 
             {/* Estimated Delivery Time */}
             <div className="flex flex-col">
-              <label className="mb-1 font-semibold">Estimated Delivery Time</label>
+              <label className="mb-1 font-semibold">
+                Estimated Delivery Time
+              </label>
               <input
                 type="text"
                 {...register("estimatedDeliveryTime", { required: true })}

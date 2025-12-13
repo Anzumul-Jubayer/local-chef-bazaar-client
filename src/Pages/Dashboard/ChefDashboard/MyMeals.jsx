@@ -16,7 +16,7 @@ const MyMeals = () => {
     const loadMeals = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/meals-by-chef/${user?.email}`
+          `https://local-chef-bazaar-server-flame.vercel.app/meals-by-chef/${user?.email}`
         );
         const data = await res.json();
         if (data.success) setMeals(data.data);
@@ -43,9 +43,12 @@ const MyMeals = () => {
 
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:3000/meals/${id}`, {
-          method: "DELETE",
-        });
+        const res = await fetch(
+          `https://local-chef-bazaar-server-flame.vercel.app/meals/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
         const data = await res.json();
 
         if (data.success) {
@@ -74,7 +77,7 @@ const MyMeals = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/meals/${editingMeal._id}`,
+        `https://local-chef-bazaar-server-flame.vercel.app/meals/${editingMeal._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

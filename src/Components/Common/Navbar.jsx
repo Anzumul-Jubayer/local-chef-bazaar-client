@@ -20,7 +20,9 @@ const Navbar = () => {
       }
 
       try {
-        const res = await fetch(`http://localhost:3000/users/role/${user.email}`);
+        const res = await fetch(
+          `https://local-chef-bazaar-server-flame.vercel.app/users/role/${user.email}`
+        );
         const data = await res.json();
         setRole(data.role || null); // backend: { success:true, role:"chef" }
       } catch (err) {

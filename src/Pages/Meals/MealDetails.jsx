@@ -32,7 +32,9 @@ const MealDetails = () => {
     const fetchMeal = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:3000/meal-details/${id}`);
+        const res = await fetch(
+          `https://local-chef-bazaar-server-flame.vercel.app/meal-details/${id}`
+        );
         if (!res.ok) throw new Error("Meal not found");
         const data = await res.json();
         setMeal(data);
@@ -48,7 +50,9 @@ const MealDetails = () => {
 
   useEffect(() => {
     const loadReviews = async () => {
-      const res = await fetch(`http://localhost:3000/reviews/${id}`);
+      const res = await fetch(
+        `https://local-chef-bazaar-server-flame.vercel.app/reviews/${id}`
+      );
       const data = await res.json();
       if (data.success) setReviews(data.data);
     };
@@ -82,18 +86,21 @@ const MealDetails = () => {
     const newReview = {
       foodId: id,
       reviewerName: user.displayName,
-      reviewerEmail: user.email, 
+      reviewerEmail: user.email,
       reviewerImage: imageUrl,
       rating: formData.rating,
       comment: formData.comment,
       date: new Date(),
     };
 
-    const res = await fetch("http://localhost:3000/reviews", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newReview),
-    });
+    const res = await fetch(
+      "https://local-chef-bazaar-server-flame.vercel.app/reviews",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newReview),
+      }
+    );
 
     const data = await res.json();
     if (data.success) {
@@ -118,11 +125,14 @@ const MealDetails = () => {
       addedTime: new Date(),
     };
 
-    const res = await fetch("http://localhost:3000/favorites", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(favoriteData),
-    });
+    const res = await fetch(
+      "https://local-chef-bazaar-server-flame.vercel.app/favorites",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(favoriteData),
+      }
+    );
 
     const data = await res.json();
     if (data.success) toast.success("Added to Favorites");
