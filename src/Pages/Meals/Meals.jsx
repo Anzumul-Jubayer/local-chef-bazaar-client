@@ -5,7 +5,7 @@ const Meals = () => {
   const [meals, setMeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(6);
+  const [limit, setLimit] = useState(9);
   const [sortOrder, setSortOrder] = useState("asc");
   const [area, setArea] = useState("");
   const [search, setSearch] = useState("");
