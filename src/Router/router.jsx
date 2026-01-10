@@ -33,6 +33,9 @@ import PlatformStatistics from "../Pages/Dashboard/AdminDashboard/PlatformStatis
 const Home = lazy(() => import("../Pages/Home/Home"));
 const Login = lazy(() => import("../Pages/Auth/Login"));
 const Register = lazy(() => import("../Pages/Auth/Register"));
+const About = lazy(() => import("../Pages/About/About"));
+const Contact = lazy(() => import("../Pages/Contact/Contact"));
+const Blog = lazy(() => import("../Pages/Blog/Blog"));
 
 const router = createBrowserRouter([
   {
@@ -61,6 +64,30 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingPage />}>
             <Register />
+          </Suspense>
+        ),
+      },
+      {
+        path: "about",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <About />
+          </Suspense>
+        ),
+      },
+      {
+        path: "contact",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <Contact />
+          </Suspense>
+        ),
+      },
+      {
+        path: "blog",
+        element: (
+          <Suspense fallback={<LoadingPage />}>
+            <Blog />
           </Suspense>
         ),
       },

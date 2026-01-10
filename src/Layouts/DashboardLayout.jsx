@@ -1,103 +1,230 @@
 import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router";
-import { HiMenu, HiX } from "react-icons/hi";
+import { HiMenu, HiX, HiUser, HiHeart, HiClipboardList, HiStar, HiHome } from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const activeClass = "bg-primary text-neutral rounded-lg px-4 py-2";
-  const normalClass =
-    "text-white hover:bg-primary hover:text-neutral rounded-lg px-4 py-2";
+  const navigationItems = [
+    { 
+      to: "profile", 
+      label: "My Profile", 
+      icon: HiUser,
+      description: "Manage your account settings"
+    },
+    { 
+      to: "orders", 
+      label: "My Orders", 
+      icon: HiClipboardList,
+      description: "Track your meal orders"
+    },
+    { 
+      to: "reviews", 
+      label: "My Reviews", 
+      icon: HiStar,
+      description: "Reviews you've written"
+    },
+    { 
+      to: "favorites", 
+      label: "Favorite Meals", 
+      icon: HiHeart,
+      description: "Your saved favorite dishes"
+    },
+  ];
+
+  const sidebarVariants = {
+    open: {
+      x: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 40
+      }
+    },
+    closed: {
+      x: "-100%",
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 40
+      }
+    }
+  };
+
+  const overlayVariants = {
+    open: {
+      opacity: 1,
+      transition: { duration: 0.3 }
+    },
+    closed: {
+      opacity: 0,
+      transition: { duration: 0.3 }
+    }
+  };
 
   return (
-    <div className="min-h-screen flex bg-neutral text-white">
+    <div className="min-h-screen bg-background flex">
       
-      <div className="hidden md:flex w-64 bg-neutral/90 p-6 flex-col gap-4 border-r border-gray-700">
-        <h2 className="text-2xl font-bold mb-6 text-primary">User Dashboard</h2>
-        <NavLink
-          to="profile"
-          className={({ isActive }) => (isActive ? activeClass : normalClass)}
-        >
-          My Profile
-        </NavLink>
-        <NavLink
-          to="orders"
-          className={({ isActive }) => (isActive ? activeClass : normalClass)}
-        >
-          My Orders
-        </NavLink>
-        <NavLink
-          to="reviews"
-          className={({ isActive }) => (isActive ? activeClass : normalClass)}
-        >
-          My Reviews
-        </NavLink>
-        <NavLink
-          to="favorites"
-          className={({ isActive }) => (isActive ? activeClass : normalClass)}
-        >
-          Favorite Meals
-        </NavLink>
-      </div>
-
-      <div
-        className={`md:hidden fixed inset-0 z-40 bg-black/60 ${
-          sidebarOpen ? "block" : "hidden"
-        }`}
-        onClick={() => setSidebarOpen(false)}
-      >
-        <div
-          className="w-64 bg-neutral p-6 h-full flex flex-col gap-4 overflow-y-auto"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-primary">User Dashboard</h2>
-            <HiX
-              className="text-2xl cursor-pointer"
-              onClick={() => setSidebarOpen(false)}
-            />
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:flex w-80 sidebar-modern flex-col">
+        <div className="p-6 border-b border-color">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+              <HiHome className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-xl font-display font-bold text-base-content">Dashboard</h2>
+              <p className="text-sm text-muted">Manage your account</p>
+            </div>
           </div>
-          <NavLink
-            to="profile"
-            className={({ isActive }) => (isActive ? activeClass : normalClass)}
-            onClick={() => setSidebarOpen(false)}
-          >
-            My Profile
-          </NavLink>
-          <NavLink
-            to="orders"
-            className={({ isActive }) => (isActive ? activeClass : normalClass)}
-            onClick={() => setSidebarOpen(false)}
-          >
-            My Orders
-          </NavLink>
-          <NavLink
-            to="reviews"
-            className={({ isActive }) => (isActive ? activeClass : normalClass)}
-            onClick={() => setSidebarOpen(false)}
-          >
-            My Reviews
-          </NavLink>
-          <NavLink
-            to="favorites"
-            className={({ isActive }) => (isActive ? activeClass : normalClass)}
-            onClick={() => setSidebarOpen(false)}
-          >
-            Favorite Meals
-          </NavLink>
+        </div>
+        
+        <nav className="flex-1 p-6 space-y-2">
+          {navigationItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `sidebar-item group ${isActive ? 'active' : ''}`
+              }
+            >
+              <div className="flex items-center space-x-3 flex-1">
+                <div className="p-2 rounded-lg bg-current/10 group-hover:bg-current/20 transition-colors">
+                  <item.icon className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium">{item.label}</div>
+                  <div className="text-xs opacity-70 truncate">{item.description}</div>
+                </div>
+              </div>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Sidebar Footer */}
+        <div className="p-6 border-t border-color">
+          <div className="card-modern p-4 bg-primary/5 border-primary/20">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                <HiStar className="w-4 h-4 text-primary" />
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-medium text-base-content">Premium Features</div>
+                <div className="text-xs text-muted">Upgrade for more benefits</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      
-      <div className="flex-1 p-6 md:ml-64">
-        
-        <div className="md:hidden mb-4">
-          <HiMenu
-            className="text-3xl cursor-pointer"
-            onClick={() => setSidebarOpen(true)}
-          />
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+            variants={overlayVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <motion.div
+              className="w-80 h-full sidebar-modern flex flex-col"
+              variants={sidebarVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6 border-b border-color">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                      <HiHome className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-display font-bold text-base-content">Dashboard</h2>
+                      <p className="text-sm text-muted">Manage your account</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setSidebarOpen(false)}
+                    className="p-2 hover:bg-hover rounded-lg transition-colors"
+                  >
+                    <HiX className="w-5 h-5 text-base-content" />
+                  </button>
+                </div>
+              </div>
+              
+              <nav className="flex-1 p-6 space-y-2">
+                {navigationItems.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `sidebar-item group ${isActive ? 'active' : ''}`
+                    }
+                  >
+                    <div className="flex items-center space-x-3 flex-1">
+                      <div className="p-2 rounded-lg bg-current/10 group-hover:bg-current/20 transition-colors">
+                        <item.icon className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium">{item.label}</div>
+                        <div className="text-xs opacity-70 truncate">{item.description}</div>
+                      </div>
+                    </div>
+                  </NavLink>
+                ))}
+              </nav>
+
+              <div className="p-6 border-t border-color">
+                <div className="card-modern p-4 bg-primary/5 border-primary/20">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                      <HiStar className="w-4 h-4 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-base-content">Premium Features</div>
+                      <div className="text-xs text-muted">Upgrade for more benefits</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        {/* Mobile Header */}
+        <div className="lg:hidden bg-surface border-b border-color p-4">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 hover:bg-hover rounded-lg transition-colors"
+            >
+              <HiMenu className="w-6 h-6 text-base-content" />
+            </button>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                <HiHome className="w-4 h-4 text-primary" />
+              </div>
+              <span className="font-display font-semibold text-base-content">Dashboard</span>
+            </div>
+            <div className="w-10"></div> {/* Spacer for centering */}
+          </div>
         </div>
-        <Outlet />
+
+        {/* Page Content */}
+        <main className="flex-1 p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
+        </main>
       </div>
     </div>
   );
