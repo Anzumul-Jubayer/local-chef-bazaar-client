@@ -78,7 +78,11 @@ const MealDetails = () => {
 
   // Review Submit
   const onSubmitReview = async (formData) => {
-    if (!user) return toast.error("You must be logged in to review!");
+    if (!user) {
+      toast.error("Please log in to submit a review!");
+      navigate("/login");
+      return;
+    }
 
     setImageLoading(true);
 
@@ -139,7 +143,11 @@ const MealDetails = () => {
 
   // Add to Favorites
   const addToFavorites = async () => {
-    if (!user) return toast.error("You must be logged in to add favorites!");
+    if (!user) {
+      toast.error("Please log in to add meals to your favorites!");
+      navigate("/login");
+      return;
+    }
 
     const favoriteData = {
       userEmail: user.email,
@@ -163,6 +171,26 @@ const MealDetails = () => {
     const data = await res.json();
     if (data.success) toast.success("Added to Favorites");
     else toast.error(data.message);
+  };
+
+  // Handle Order Now
+  const handleOrderNow = () => {
+    if (!user) {
+      toast.error("Please log in to place an order!");
+      navigate("/login");
+      return;
+    }
+    navigate(`/orders/${meal._id}`);
+  };
+
+  // Handle Write Review
+  const handleWriteReview = () => {
+    if (!user) {
+      toast.error("Please log in to write a review!");
+      navigate("/login");
+      return;
+    }
+    setReviewModal(true);
   };
 
   if (loading) {
@@ -317,14 +345,14 @@ const MealDetails = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4">
                   <motion.button
-                    onClick={() => navigate(`/orders/${meal._id}`)}
+                    onClick={handleOrderNow}
                     className="flex-1 group relative overflow-hidden bg-gradient-to-r from-primary to-yellow-400 text-black font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <div className="relative flex items-center justify-center space-x-3">
                       <HiShoppingCart className="w-5 h-5" />
-                      <span>Order Now</span>
+                      <span>{user ? 'Order Now' : 'Login to Order'}</span>
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                   </motion.button>
@@ -337,7 +365,7 @@ const MealDetails = () => {
                   >
                     <div className="relative flex items-center justify-center space-x-3">
                       <HiHeart className="w-5 h-5" />
-                      <span>Add to Favorites</span>
+                      <span>{user ? 'Add to Favorites' : 'Login to Save'}</span>
                     </div>
                   </motion.button>
                 </div>
@@ -366,7 +394,7 @@ const MealDetails = () => {
                 </div>
                 
                 <motion.button
-                  onClick={() => setReviewModal(true)}
+                  onClick={handleWriteReview}
                   className="group relative overflow-hidden bg-gradient-to-r from-primary/10 to-accent/10 hover:from-primary/20 hover:to-accent/20 text-primary hover:text-primary font-semibold px-6 py-3 rounded-xl border border-primary/20 hover:border-primary/40 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -377,7 +405,7 @@ const MealDetails = () => {
                   {/* Button Content */}
                   <div className="relative flex items-center space-x-2">
                     <HiChatAlt className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-                    <span>Write Review</span>
+                    <span>{user ? 'Write Review' : 'Login to Review'}</span>
                     <HiSparkles className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
                   </div>
                   
@@ -396,7 +424,7 @@ const MealDetails = () => {
                     <h3 className="text-lg font-semibold text-base-content mb-2">No reviews yet</h3>
                     <p className="text-muted mb-6">Be the first to share your experience with this meal!</p>
                     <motion.button
-                      onClick={() => setReviewModal(true)}
+                      onClick={handleWriteReview}
                       className="group relative overflow-hidden bg-gradient-to-r from-primary to-yellow-400 text-black font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 active:translate-y-0 min-w-[200px]"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -407,7 +435,7 @@ const MealDetails = () => {
                       {/* Button Content */}
                       <div className="relative flex items-center justify-center space-x-3">
                         <HiStar className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                        <span className="text-lg">Write First Review</span>
+                        <span className="text-lg">{user ? 'Write First Review' : 'Login to Review'}</span>
                         <HiSparkles className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                       </div>
                       
@@ -511,9 +539,13 @@ const MealDetails = () => {
                   <input
                     type="text"
                     value={user?.displayName || ""}
+                    placeholder={user ? "" : "Please log in first"}
                     className="input-modern w-full"
                     readOnly
                   />
+                  {!user && (
+                    <p className="text-error text-sm mt-1">You must be logged in to submit a review</p>
+                  )}
                 </div>
 
                 {/* Image Upload */}

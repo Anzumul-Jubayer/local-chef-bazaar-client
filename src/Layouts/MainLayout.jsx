@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../Components/Common/Navbar";
 import { Outlet } from "react-router";
 import Footer from "../Components/Common/Footer";
+import BackToTop from "../Components/Common/BackToTop";
 
 const MainLayout = () => {
   return (
@@ -11,6 +12,7 @@ const MainLayout = () => {
         <Outlet></Outlet>
       </div>
       <Footer></Footer>
+      <BackToTop />
     </div>
   );
 };

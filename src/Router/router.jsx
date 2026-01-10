@@ -104,9 +104,7 @@ const router = createBrowserRouter([
         path: "/meal-details/:id",
         element: (
           <Suspense fallback={<LoadingPage />}>
-            <PrivateRoute>
-              <MealDetails />
-            </PrivateRoute>
+            <MealDetails />
           </Suspense>
         ),
       },

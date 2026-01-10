@@ -222,12 +222,12 @@ const Navbar = () => {
       <div className="container-modern">
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
-          <NavLink to="/" className="flex items-center space-x-3 group" onClick={closeAllMenus}>
+          <div className="flex items-center space-x-3">
             <div className="relative">
               <img 
                 src={logo} 
                 alt="LocalChefBazaar Logo" 
-                className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300"
+                className="w-10 h-10 object-cover transition-all duration-300"
               />
             </div>
             <div className="font-display">
@@ -235,7 +235,7 @@ const Navbar = () => {
               <span className="text-xl font-bold text-secondary">Chef</span>
               <span className="text-xl font-bold text-accent">Bazaar</span>
             </div>
-          </NavLink>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1">
@@ -246,15 +246,35 @@ const Navbar = () => {
                 to={link.to}
                 onClick={closeAllMenus}
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center space-x-2 ${
+                  `relative px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 group ${
                     isActive 
-                      ? "bg-primary text-black font-semibold" 
-                      : "text-base-content hover:bg-hover hover:text-primary"
+                      ? "bg-gradient-to-r from-primary/15 via-primary/10 to-primary/15 text-primary font-bold shadow-lg border border-primary/20" 
+                      : "text-base-content hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 hover:text-primary hover:shadow-md"
                   }`
                 }
               >
-                <link.icon className="w-4 h-4" />
-                <span>{link.label}</span>
+                {({ isActive }) => (
+                  <>
+                    {/* Active indicator */}
+                    {isActive && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 rounded-xl blur-sm"></div>
+                    )}
+                    
+                    {/* Content */}
+                    <div className="relative flex items-center space-x-2">
+                      <link.icon className={`w-4 h-4 transition-all duration-300 ${
+                        isActive ? "text-primary scale-110" : "group-hover:text-primary group-hover:scale-105"
+                      }`} />
+                      <span className="relative">
+                        {link.label}
+                        {/* Active underline */}
+                        {isActive && (
+                          <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full"></div>
+                        )}
+                      </span>
+                    </div>
+                  </>
+                )}
               </NavLink>
             ))}
           </div>
@@ -351,16 +371,34 @@ const Navbar = () => {
                           <NavLink
                             to={dashboardMenu.mainRoute}
                             onClick={() => setIsProfileMenuOpen(false)}
-                            className="flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-primary/5 to-accent/5 hover:from-primary/10 hover:to-accent/10 rounded-xl transition-all duration-300 group border border-primary/10 hover:border-primary/20"
+                            className={({ isActive }) =>
+                              `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group border ${
+                                isActive
+                                  ? "bg-gradient-to-r from-primary/15 via-primary/10 to-primary/15 border-primary/30 shadow-lg"
+                                  : "bg-gradient-to-r from-primary/5 to-accent/5 hover:from-primary/10 hover:to-accent/10 border-primary/10 hover:border-primary/20"
+                              }`
+                            }
                           >
-                            <div className="p-2 bg-primary/15 rounded-lg group-hover:bg-primary/25 transition-colors">
-                              <HiViewGrid className="w-5 h-5 text-primary" />
-                            </div>
-                            <div className="flex-1">
-                              <div className="font-semibold text-base-content">Dashboard Overview</div>
-                              <div className="text-xs text-muted">Main dashboard</div>
-                            </div>
-                            <HiArrowRight className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                            {({ isActive }) => (
+                              <>
+                                <div className={`p-2 rounded-lg transition-colors ${
+                                  isActive ? "bg-primary/25" : "bg-primary/15 group-hover:bg-primary/25"
+                                }`}>
+                                  <HiViewGrid className={`w-5 h-5 transition-all duration-300 ${
+                                    isActive ? "text-primary scale-110" : "text-primary"
+                                  }`} />
+                                </div>
+                                <div className="flex-1">
+                                  <div className={`font-semibold transition-colors ${
+                                    isActive ? "text-primary" : "text-base-content"
+                                  }`}>Dashboard Overview</div>
+                                  <div className="text-xs text-muted">Main dashboard</div>
+                                </div>
+                                <HiArrowRight className={`w-4 h-4 text-primary transition-all duration-300 ${
+                                  isActive ? "opacity-100 translate-x-1" : "opacity-0 group-hover:opacity-100"
+                                }`} />
+                              </>
+                            )}
                           </NavLink>
                         </div>
 
@@ -381,18 +419,44 @@ const Navbar = () => {
                                     key={item.to}
                                     to={item.to}
                                     onClick={() => setIsProfileMenuOpen(false)}
-                                    className="menu-item-modern flex items-center space-x-3 px-3 py-2 text-sm text-base-content hover:bg-hover rounded-lg transition-colors group"
+                                    className={({ isActive }) =>
+                                      `menu-item-modern flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-all duration-300 group ${
+                                        isActive
+                                          ? "bg-gradient-to-r from-primary/15 to-accent/15 text-primary font-semibold border border-primary/20 shadow-md"
+                                          : "text-base-content hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 hover:text-primary"
+                                      }`
+                                    }
                                   >
-                                    <div className="p-1.5 bg-base-300 rounded-lg group-hover:bg-primary/10 transition-colors">
-                                      <item.icon className="w-4 h-4 text-muted group-hover:text-primary transition-colors" />
-                                    </div>
-                                    <div className="flex-1">
-                                      <div className="font-medium">{item.label}</div>
-                                      <div className="text-xs text-muted opacity-0 group-hover:opacity-100 transition-opacity">
-                                        {getItemDescription(item.label)}
-                                      </div>
-                                    </div>
-                                    <HiChevronDown className="w-3 h-3 text-muted rotate-[-90deg] opacity-0 group-hover:opacity-100 transition-all" />
+                                    {({ isActive }) => (
+                                      <>
+                                        <div className={`p-1.5 rounded-lg transition-colors ${
+                                          isActive 
+                                            ? "bg-primary/20" 
+                                            : "bg-base-300 group-hover:bg-primary/10"
+                                        }`}>
+                                          <item.icon className={`w-4 h-4 transition-all duration-300 ${
+                                            isActive 
+                                              ? "text-primary scale-110" 
+                                              : "text-muted group-hover:text-primary"
+                                          }`} />
+                                        </div>
+                                        <div className="flex-1">
+                                          <div className={`font-medium transition-colors ${
+                                            isActive ? "text-primary" : ""
+                                          }`}>{item.label}</div>
+                                          <div className={`text-xs text-muted transition-opacity ${
+                                            isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                                          }`}>
+                                            {getItemDescription(item.label)}
+                                          </div>
+                                        </div>
+                                        <HiChevronDown className={`w-3 h-3 text-muted rotate-[-90deg] transition-all duration-300 ${
+                                          isActive 
+                                            ? "opacity-100 text-primary" 
+                                            : "opacity-0 group-hover:opacity-100"
+                                        }`} />
+                                      </>
+                                    )}
                                   </NavLink>
                                 ))}
                               </div>
@@ -449,15 +513,35 @@ const Navbar = () => {
                     to={link.to}
                     onClick={closeMobileMenu}
                     className={({ isActive }) =>
-                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-colors ${
+                      `relative flex items-center space-x-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 group ${
                         isActive
-                          ? "bg-primary text-black font-semibold"
-                          : "text-base-content hover:bg-hover"
+                          ? "bg-gradient-to-r from-primary/15 via-primary/10 to-primary/15 text-primary font-bold shadow-lg border border-primary/20"
+                          : "text-base-content hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 hover:text-primary"
                       }`
                     }
                   >
-                    <link.icon className="w-5 h-5" />
-                    <span>{link.label}</span>
+                    {({ isActive }) => (
+                      <>
+                        {/* Active indicator */}
+                        {isActive && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 rounded-xl blur-sm"></div>
+                        )}
+                        
+                        {/* Content */}
+                        <div className="relative flex items-center space-x-3">
+                          <link.icon className={`w-5 h-5 transition-all duration-300 ${
+                            isActive ? "text-primary scale-110" : "group-hover:text-primary group-hover:scale-105"
+                          }`} />
+                          <span className="relative">
+                            {link.label}
+                            {/* Active underline */}
+                            {isActive && (
+                              <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full"></div>
+                            )}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   </NavLink>
                 ))}
               </div>
@@ -521,13 +605,27 @@ const Navbar = () => {
                         <NavLink
                           to={dashboardMenu.mainRoute}
                           onClick={closeMobileMenu}
-                          className="flex items-center space-x-3 px-4 py-3 bg-primary/5 hover:bg-primary/10 rounded-lg transition-colors mb-4"
+                          className={({ isActive }) =>
+                            `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 mb-4 ${
+                              isActive
+                                ? "bg-gradient-to-r from-primary/15 via-primary/10 to-primary/15 border border-primary/20 shadow-lg"
+                                : "bg-primary/5 hover:bg-primary/10"
+                            }`
+                          }
                         >
-                          <HiViewGrid className="w-5 h-5 text-primary" />
-                          <div>
-                            <div className="font-semibold text-base-content">Dashboard Overview</div>
-                            <div className="text-xs text-muted">Main dashboard</div>
-                          </div>
+                          {({ isActive }) => (
+                            <>
+                              <HiViewGrid className={`w-5 h-5 transition-all duration-300 ${
+                                isActive ? "text-primary scale-110" : "text-primary"
+                              }`} />
+                              <div>
+                                <div className={`font-semibold transition-colors ${
+                                  isActive ? "text-primary" : "text-base-content"
+                                }`}>Dashboard Overview</div>
+                                <div className="text-xs text-muted">Main dashboard</div>
+                              </div>
+                            </>
+                          )}
                         </NavLink>
 
                         {/* Dashboard Menu Items */}
@@ -547,13 +645,27 @@ const Navbar = () => {
                                     key={item.to}
                                     to={item.to}
                                     onClick={closeMobileMenu}
-                                    className="flex items-center space-x-3 px-3 py-2 text-sm text-base-content hover:bg-hover rounded-lg transition-colors"
+                                    className={({ isActive }) =>
+                                      `flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-all duration-300 ${
+                                        isActive
+                                          ? "bg-gradient-to-r from-primary/15 to-accent/15 text-primary font-semibold border border-primary/20 shadow-md"
+                                          : "text-base-content hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 hover:text-primary"
+                                      }`
+                                    }
                                   >
-                                    <item.icon className="w-4 h-4 text-muted" />
-                                    <div>
-                                      <div className="font-medium">{item.label}</div>
-                                      <div className="text-xs text-muted">{getItemDescription(item.label)}</div>
-                                    </div>
+                                    {({ isActive }) => (
+                                      <>
+                                        <item.icon className={`w-4 h-4 transition-all duration-300 ${
+                                          isActive ? "text-primary scale-110" : "text-muted"
+                                        }`} />
+                                        <div>
+                                          <div className={`font-medium transition-colors ${
+                                            isActive ? "text-primary" : ""
+                                          }`}>{item.label}</div>
+                                          <div className="text-xs text-muted">{getItemDescription(item.label)}</div>
+                                        </div>
+                                      </>
+                                    )}
                                   </NavLink>
                                 ))}
                               </div>

@@ -174,7 +174,7 @@ const Meals = () => {
       
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+        <section className="py-8 bg-background">
           <div className="container-modern">
             <motion.div
               className="text-center max-w-4xl mx-auto"
@@ -187,12 +187,12 @@ const Meals = () => {
                 <span>Local Chef Meals</span>
               </div>
               
-              <h1 className="text-4xl md:text-6xl font-display font-bold text-base-content mb-6">
+              <h1 className="text-4xl md:text-6xl font-display font-bold text-base-content mb-4">
                 Discover Amazing 
                 <span className="text-primary"> Local Meals</span>
               </h1>
               
-              <p className="text-xl text-muted leading-relaxed mb-8">
+              <p className="text-xl text-muted leading-relaxed mb-6">
                 Explore authentic homemade dishes crafted by passionate local chefs. 
                 Fresh ingredients, traditional recipes, delivered to your door.
               </p>
@@ -200,11 +200,12 @@ const Meals = () => {
           </div>
         </section>
 
-        {/* Search Section - Prominent and Separate */}
-        <section className="py-16 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+        {/* Search & Sort Section - Combined for better alignment */}
+        <section className="py-6 bg-background">
           <div className="container-modern">
+            {/* Search Subsection */}
             <motion.div
-              className="text-center mb-8"
+              className="text-center mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -219,7 +220,7 @@ const Meals = () => {
 
             {/* Prominent Search Bar */}
             <motion.div
-              className="max-w-4xl mx-auto"
+              className="max-w-4xl mx-auto mb-6"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -229,7 +230,7 @@ const Meals = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-500"></div>
                 
                 {/* Search Container */}
-                <div className="relative bg-surface border-2 border-color hover:border-primary/50 focus-within:border-primary rounded-3xl shadow-xl hover:shadow-2xl focus-within:shadow-2xl transition-all duration-300">
+                <div className="relative bg-background/80 backdrop-blur-sm border border-primary/20 hover:border-primary/40 focus-within:border-primary/60 rounded-3xl shadow-lg hover:shadow-xl focus-within:shadow-xl transition-all duration-300">
                   <div className="flex items-center">
                     {/* Search Icon */}
                     <div className="pl-8 pr-4">
@@ -272,17 +273,90 @@ const Meals = () => {
                 </div>
               </div>
             </motion.div>
+
+            {/* Sort Subsection - Integrated without gap */}
+            <motion.div
+              className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 bg-background/50 backdrop-blur-sm border border-primary/10 rounded-2xl p-6 shadow-sm"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              {/* Sort Header */}
+              <div className="flex items-center space-x-3">
+                <div className="p-3 bg-primary/10 rounded-xl">
+                  <HiSortAscending className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-base-content">Sort Results</h3>
+                  <p className="text-sm text-muted">Arrange meals by your preference</p>
+                </div>
+              </div>
+
+              {/* Sort Controls */}
+              <div className="flex flex-col sm:flex-row gap-4 lg:gap-6">
+                {/* Sort By Dropdown */}
+                <div className="min-w-[200px]">
+                  <label className="block text-sm font-semibold text-base-content mb-2">Sort By</label>
+                  <div className="relative">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="w-full px-4 pr-10 py-4 bg-background/50 border border-primary/20 hover:border-primary/40 focus:border-primary/60 rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium shadow-sm hover:shadow-md text-base-content"
+                    >
+                      {sortOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    <HiChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" />
+                  </div>
+                </div>
+
+                {/* Sort Order Toggle */}
+                <div className="min-w-[200px]">
+                  <label className="block text-sm font-semibold text-base-content mb-2">Order</label>
+                  <div className="flex bg-background/50 border border-primary/20 rounded-xl p-1 shadow-sm">
+                    <button
+                      onClick={() => setSortOrder("asc")}
+                      className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                        sortOrder === "asc"
+                          ? "bg-primary text-black shadow-md transform scale-105"
+                          : "text-base-content hover:bg-hover"
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <HiArrowUp className="w-4 h-4" />
+                        <span>Low to High</span>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => setSortOrder("desc")}
+                      className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                        sortOrder === "desc"
+                          ? "bg-primary text-black shadow-md transform scale-105"
+                          : "text-base-content hover:bg-hover"
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <HiArrowDown className="w-4 h-4" />
+                        <span>High to Low</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </section>
-
         {/* Filter Section - Visually Distinct */}
-        <section className="py-12 bg-surface-elevated border-y border-color">
+        <section className="py-4 bg-background">
           <div className="container-modern">
             {/* Mobile Filter Toggle */}
-            <div className="lg:hidden mb-6">
+            <div className="lg:hidden mb-4">
               <motion.button
                 onClick={() => setShowFilters(!showFilters)}
-                className="w-full flex items-center justify-between px-6 py-4 bg-surface border-2 border-color hover:border-accent rounded-2xl shadow-md hover:shadow-lg transition-all duration-300"
+                className="w-full flex items-center justify-between px-6 py-4 bg-background/50 backdrop-blur-sm border border-accent/20 hover:border-accent/40 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300"
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
               >
@@ -325,8 +399,8 @@ const Meals = () => {
                 
                 {/* Location & Category Filter Card */}
                 <motion.div
-                  className="bg-surface border-2 border-color hover:border-accent/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  whileHover={{ y: -4 }}
+                  className="bg-background/30 backdrop-blur-sm border border-accent/20 hover:border-accent/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                  whileHover={{ y: -2 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
@@ -350,7 +424,7 @@ const Meals = () => {
                         <select
                           value={area}
                           onChange={(e) => setArea(e.target.value)}
-                          className="w-full pl-12 pr-10 py-3 bg-background border-2 border-color hover:border-accent/50 focus:border-accent rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
+                          className="w-full pl-12 pr-10 py-3 bg-background/50 backdrop-blur-sm border border-accent/30 hover:border-accent/50 focus:border-accent rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
                         >
                           <option value="">All Areas</option>
                           {availableAreas.map((areaOption) => (
@@ -371,7 +445,7 @@ const Meals = () => {
                         <select
                           value={categoryFilter}
                           onChange={(e) => setCategoryFilter(e.target.value)}
-                          className="w-full pl-12 pr-10 py-3 bg-background border-2 border-color hover:border-accent/50 focus:border-accent rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
+                          className="w-full pl-12 pr-10 py-3 bg-background/50 backdrop-blur-sm border border-accent/30 hover:border-accent/50 focus:border-accent rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
                         >
                           <option value="">All Categories</option>
                           {availableCategories.map((category) => (
@@ -388,8 +462,8 @@ const Meals = () => {
 
                 {/* Price & Rating Filter Card */}
                 <motion.div
-                  className="bg-surface border-2 border-color hover:border-secondary/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  whileHover={{ y: -4 }}
+                  className="bg-background/30 backdrop-blur-sm border border-secondary/20 hover:border-secondary/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                  whileHover={{ y: -2 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
@@ -414,14 +488,14 @@ const Meals = () => {
                           placeholder="Min"
                           value={priceRange.min}
                           onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
-                          className="px-3 py-3 bg-background border-2 border-color hover:border-secondary/50 focus:border-secondary rounded-xl transition-all duration-300 focus:outline-none text-center font-medium"
+                          className="px-3 py-3 bg-background/50 backdrop-blur-sm border border-secondary/30 hover:border-secondary/50 focus:border-secondary rounded-xl transition-all duration-300 focus:outline-none text-center font-medium"
                         />
                         <input
                           type="number"
                           placeholder="Max"
                           value={priceRange.max}
                           onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
-                          className="px-3 py-3 bg-background border-2 border-color hover:border-secondary/50 focus:border-secondary rounded-xl transition-all duration-300 focus:outline-none text-center font-medium"
+                          className="px-3 py-3 bg-background/50 backdrop-blur-sm border border-secondary/30 hover:border-secondary/50 focus:border-secondary rounded-xl transition-all duration-300 focus:outline-none text-center font-medium"
                         />
                       </div>
                     </div>
@@ -434,7 +508,7 @@ const Meals = () => {
                         <select
                           value={ratingFilter}
                           onChange={(e) => setRatingFilter(e.target.value)}
-                          className="w-full pl-12 pr-10 py-3 bg-background border-2 border-color hover:border-secondary/50 focus:border-secondary rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
+                          className="w-full pl-12 pr-10 py-3 bg-background/50 backdrop-blur-sm border border-secondary/30 hover:border-secondary/50 focus:border-secondary rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
                         >
                           {ratingOptions.map((option) => (
                             <option key={option.value} value={option.value}>
@@ -450,8 +524,8 @@ const Meals = () => {
 
                 {/* Chef Experience & Date Filter Card */}
                 <motion.div
-                  className="bg-surface border-2 border-color hover:border-primary/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  whileHover={{ y: -4 }}
+                  className="bg-background/30 backdrop-blur-sm border border-primary/20 hover:border-primary/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                  whileHover={{ y: -2 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
@@ -475,7 +549,7 @@ const Meals = () => {
                         <select
                           value={chefExperienceFilter}
                           onChange={(e) => setChefExperienceFilter(e.target.value)}
-                          className="w-full pl-12 pr-10 py-3 bg-background border-2 border-color hover:border-primary/50 focus:border-primary rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
+                          className="w-full pl-12 pr-10 py-3 bg-background/50 backdrop-blur-sm border border-primary/30 hover:border-primary/50 focus:border-primary rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
                         >
                           {experienceOptions.map((option) => (
                             <option key={option.value} value={option.value}>
@@ -495,7 +569,7 @@ const Meals = () => {
                         <select
                           value={dateFilter}
                           onChange={(e) => setDateFilter(e.target.value)}
-                          className="w-full pl-12 pr-10 py-3 bg-background border-2 border-color hover:border-primary/50 focus:border-primary rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
+                          className="w-full pl-12 pr-10 py-3 bg-background/50 backdrop-blur-sm border border-primary/30 hover:border-primary/50 focus:border-primary rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium"
                         >
                           {dateOptions.map((option) => (
                             <option key={option.value} value={option.value}>
@@ -511,8 +585,8 @@ const Meals = () => {
 
                 {/* Active Filters & Clear Card */}
                 <motion.div
-                  className="bg-surface border-2 border-color hover:border-accent/50 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-                  whileHover={{ y: -4 }}
+                  className="bg-background/30 backdrop-blur-sm border border-accent/20 hover:border-accent/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300"
+                  whileHover={{ y: -2 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
@@ -648,86 +722,8 @@ const Meals = () => {
           </div>
         </section>
 
-        {/* Sort Section - Clear and Visible */}
-        <section className="py-12 bg-background">
-          <div className="container-modern">
-            <motion.div
-              className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              {/* Sort Header */}
-              <div className="flex items-center space-x-3">
-                <div className="p-3 bg-primary/10 rounded-xl">
-                  <HiSortAscending className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-base-content">Sort Results</h2>
-                  <p className="text-sm text-muted">Arrange meals by your preference</p>
-                </div>
-              </div>
-
-              {/* Sort Controls */}
-              <div className="flex flex-col sm:flex-row gap-4 lg:gap-6">
-                {/* Sort By Dropdown */}
-                <div className="min-w-[200px]">
-                  <label className="block text-sm font-semibold text-base-content mb-2">Sort By</label>
-                  <div className="relative">
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full px-4 pr-10 py-4 bg-surface border-2 border-color hover:border-primary/50 focus:border-primary rounded-xl transition-all duration-300 focus:outline-none appearance-none cursor-pointer font-medium shadow-md hover:shadow-lg"
-                    >
-                      {sortOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                    <HiChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted pointer-events-none" />
-                  </div>
-                </div>
-
-                {/* Sort Order Toggle */}
-                <div className="min-w-[200px]">
-                  <label className="block text-sm font-semibold text-base-content mb-2">Order</label>
-                  <div className="flex bg-surface border-2 border-color rounded-xl p-1 shadow-md">
-                    <button
-                      onClick={() => setSortOrder("asc")}
-                      className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                        sortOrder === "asc"
-                          ? "bg-primary text-black shadow-md transform scale-105"
-                          : "text-base-content hover:bg-hover"
-                      }`}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <HiArrowUp className="w-4 h-4" />
-                        <span>Low to High</span>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => setSortOrder("desc")}
-                      className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                        sortOrder === "desc"
-                          ? "bg-primary text-black shadow-md transform scale-105"
-                          : "text-base-content hover:bg-hover"
-                      }`}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <HiArrowDown className="w-4 h-4" />
-                        <span>High to Low</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
         {/* Meals Grid Section */}
-        <section className="py-16">
+        <section className="py-6 bg-background">
           <div className="container-modern">
             {meals.length === 0 ? (
               <motion.div
@@ -750,7 +746,7 @@ const Meals = () => {
             ) : (
               <>
                 {/* Enhanced Results Count with Filter Summary */}
-                <div className="bg-surface-elevated border border-color rounded-2xl p-6 mb-8">
+                <div className="bg-background/50 backdrop-blur-sm border border-primary/20 rounded-2xl p-6 mb-6 shadow-sm">
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                       <div className="flex items-center space-x-2">
@@ -808,7 +804,7 @@ const Meals = () => {
                 </div>
 
                 {/* Quick Filter Bar */}
-                <div className="flex flex-wrap items-center gap-3 mb-8 p-4 bg-surface border border-color rounded-xl">
+                <div className="flex flex-wrap items-center gap-3 mb-6 p-4 bg-background/30 backdrop-blur-sm border border-primary/20 rounded-xl shadow-sm">
                   <span className="text-sm font-medium text-muted">Quick filters:</span>
                   
                   {/* Popular Categories */}
@@ -819,7 +815,7 @@ const Meals = () => {
                       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                         categoryFilter === category
                           ? 'bg-primary text-black shadow-md'
-                          : 'bg-background border border-color hover:border-primary/50 text-base-content hover:bg-hover'
+                          : 'bg-background/30 backdrop-blur-sm border border-primary/20 hover:border-primary/40 text-base-content hover:bg-background/50'
                       }`}
                     >
                       {category}
@@ -836,7 +832,7 @@ const Meals = () => {
                       className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                         ratingFilter === rating
                           ? 'bg-yellow-500/20 text-yellow-700 border border-yellow-500/30'
-                          : 'bg-background border border-color hover:border-yellow-500/50 text-base-content hover:bg-hover'
+                          : 'bg-background/30 backdrop-blur-sm border border-primary/20 hover:border-yellow-500/40 text-base-content hover:bg-background/50'
                       }`}
                     >
                       <HiStar className="w-3 h-3" />
@@ -852,7 +848,7 @@ const Meals = () => {
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                       priceRange.max === '200'
                         ? 'bg-secondary/20 text-secondary border border-secondary/30'
-                        : 'bg-background border border-color hover:border-secondary/50 text-base-content hover:bg-hover'
+                        : 'bg-background/30 backdrop-blur-sm border border-primary/20 hover:border-secondary/40 text-base-content hover:bg-background/50'
                     }`}
                   >
                     <HiCurrencyDollar className="w-3 h-3" />
@@ -864,7 +860,7 @@ const Meals = () => {
                     className={`flex items-center space-x-1 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                       priceRange.min === '200'
                         ? 'bg-secondary/20 text-secondary border border-secondary/30'
-                        : 'bg-background border border-color hover:border-secondary/50 text-base-content hover:bg-hover'
+                        : 'bg-background/30 backdrop-blur-sm border border-primary/20 hover:border-secondary/40 text-base-content hover:bg-background/50'
                     }`}
                   >
                     <HiCurrencyDollar className="w-3 h-3" />
@@ -1003,7 +999,7 @@ const Meals = () => {
             {/* Modern Pagination */}
             {totalMeals > 0 && (
               <motion.div
-                className="mt-16"
+                className="mt-12"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 }}
@@ -1021,7 +1017,7 @@ const Meals = () => {
                   <motion.button
                     onClick={() => setPage(page - 1)}
                     disabled={!hasPrevPage}
-                    className="group flex items-center space-x-2 px-4 py-3 bg-surface border-2 border-color hover:border-primary text-base-content hover:text-primary font-medium rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-color disabled:hover:text-base-content"
+                    className="group flex items-center space-x-2 px-4 py-3 bg-background/50 backdrop-blur-sm border border-primary/20 hover:border-primary/40 text-base-content hover:text-primary font-medium rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-primary/20 disabled:hover:text-base-content"
                     whileHover={{ scale: hasPrevPage ? 1.05 : 1 }}
                     whileTap={{ scale: hasPrevPage ? 0.95 : 1 }}
                   >
@@ -1069,8 +1065,8 @@ const Meals = () => {
                           onClick={() => setPage(pageNum)}
                           className={`px-4 py-3 font-medium rounded-xl transition-all duration-300 ${
                             pageNum === page
-                              ? "bg-primary text-black shadow-lg scale-110"
-                              : "bg-surface border border-color hover:border-primary text-base-content hover:text-primary"
+                              ? "pagination-active-dark shadow-lg scale-110"
+                              : "bg-background/50 backdrop-blur-sm border border-primary/20 hover:border-primary/40 text-base-content hover:text-primary"
                           }`}
                           whileHover={{ scale: pageNum === page ? 1.1 : 1.05 }}
                           whileTap={{ scale: pageNum === page ? 1.1 : 0.95 }}
@@ -1102,7 +1098,7 @@ const Meals = () => {
                   <motion.button
                     onClick={() => setPage(page + 1)}
                     disabled={!hasNextPage}
-                    className="group flex items-center space-x-2 px-4 py-3 bg-surface border-2 border-color hover:border-primary text-base-content hover:text-primary font-medium rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-color disabled:hover:text-base-content"
+                    className="group flex items-center space-x-2 px-4 py-3 bg-background/50 backdrop-blur-sm border border-primary/20 hover:border-primary/40 text-base-content hover:text-primary font-medium rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-primary/20 disabled:hover:text-base-content"
                     whileHover={{ scale: hasNextPage ? 1.05 : 1 }}
                     whileTap={{ scale: hasNextPage ? 0.95 : 1 }}
                   >
