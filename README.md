@@ -9,8 +9,18 @@ It connects users and chefs in a simple and friendly way.
 
 ## 🌐 Live Website
 
-Live URL: https://local-chef-bazar-a-11.netlify.app/
-Server :https://local-chef-bazaar-server-hazel.vercel.app/
+Live URL: https://local-chef-bazar.surge.sh/
+Server: https://local-chef-bazaar-server-1sfi4xc2o-anzumul-jubayers-projects.vercel.app/
+
+---
+
+## 🔒 Security Notice
+
+**Important**: This repository follows security best practices:
+- Environment files (`.env.*`) are excluded from version control
+- Use `.env.production.template` as a reference for required environment variables
+- Never commit actual API keys or sensitive configuration
+- See `SECURITY-SECRETS-RESOLUTION.md` for detailed security information
 
 ---
 
