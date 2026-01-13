@@ -90,7 +90,7 @@ const ColorDemo = () => {
             <p className="text-muted text-sm mb-4">Elevated surface with shadow</p>
             <button className="btn-secondary-modern btn-sm">Action</button>
           </div>
-          <div className="bg-surface-elevated p-6 rounded-xl border border-color">
+          <div className="bg-surface-elevated p-6 rounded-xl border border-gray-200">
             <h4 className="font-semibold text-base-content mb-2">Custom Surface</h4>
             <p className="text-muted text-sm mb-4">Theme-aware surface</p>
             <button className="btn-accent-modern btn-sm">Action</button>

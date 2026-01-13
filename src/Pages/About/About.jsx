@@ -81,7 +81,7 @@ const About = () => {
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 border-y border-color">
+        <section className="py-16 border-y border-gray-200">
           <div className="container-modern">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {stats.map((stat, index) => (

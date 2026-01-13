@@ -14,10 +14,12 @@ import MyOrders from "../Pages/Dashboard/UserDashboard/MyOrders";
 import MyReviews from "../Pages/Dashboard/UserDashboard/MyReviews";
 import FavoriteMeals from "../Pages/Dashboard/UserDashboard/FavoriteMeals";
 import UserDashboard from "../Pages/Dashboard/UserDashboard/UserDashboard";
+import DashboardHome from "../Pages/Dashboard/UserDashboard/DashboardHome";
 import Payment from "../Pages/Dashboard/UserDashboard/Payment";
 import PaymentSuccess from "../Pages/Dashboard/UserDashboard/PaymentSuccess";
 import ChefDashboard from "../Pages/Dashboard/ChefDashboard/ChefDashboard";
 import ChefRoute from "./ChefRoute";
+import ChefDashboardHome from "../Pages/Dashboard/ChefDashboard/ChefDashboardHome";
 import ChefProfile from "../Pages/Dashboard/ChefDashboard/ChefProfile";
 import CreateMeal from "../Pages/Dashboard/ChefDashboard/CreateMeal";
 import MyMeals from "../Pages/Dashboard/ChefDashboard/MyMeals";
@@ -25,6 +27,7 @@ import OrderRequests from "../Pages/Dashboard/ChefDashboard/OrderRequests";
 import ChefDashboardLayout from "../Layouts/ChefDashboardLayout";
 import AdminRoute from "./AdminRoute";
 import AdminDashboard from "../Pages/Dashboard/AdminDashboard/AdminDashboard";
+import AdminDashboardHome from "../Pages/Dashboard/AdminDashboard/AdminDashboardHome";
 import AdminProfile from "../Pages/Dashboard/AdminDashboard/AdminProfile";
 import ManageUsers from "../Pages/Dashboard/AdminDashboard/ManageUsers";
 import ManageRequests from "../Pages/Dashboard/AdminDashboard/ManageRequests";
@@ -130,6 +133,7 @@ const router = createBrowserRouter([
           </Suspense>
         ),
         children: [
+          { index: true, element: <DashboardHome /> },
           { path: "profile", element: <MyProfile /> },
           { path: "orders", element: <MyOrders /> },
           { path: "payment", element: <Payment /> },
@@ -152,6 +156,7 @@ const router = createBrowserRouter([
           
         ),
         children: [
+          { index: true, element: <ChefDashboardHome /> },
           { path: "chef-profile", element: <ChefProfile /> },
           { path: "create-meals", element: <CreateMeal /> },
           { path: "my-meals", element: <MyMeals /> },
@@ -168,6 +173,7 @@ const router = createBrowserRouter([
           
         ),
         children: [
+          { index: true, element: <AdminDashboardHome /> },
           { path: "admin-profile", element: <AdminProfile/> },
           { path: "manage-user", element: <ManageUsers /> },
           { path: "manage-request", element: <ManageRequests /> },

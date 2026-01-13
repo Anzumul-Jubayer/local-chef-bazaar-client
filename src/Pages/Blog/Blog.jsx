@@ -187,7 +187,7 @@ const Blog = () => {
         </section>
 
         {/* Categories Filter */}
-        <section className="py-8 border-b border-color">
+        <section className="py-8 border-b border-gray-200">
           <div className="container-modern">
             <div className="flex flex-wrap justify-center gap-4">
               {categories.map((category) => (
@@ -323,7 +323,7 @@ const Blog = () => {
                       </div>
 
                       {/* Footer */}
-                      <div className="flex items-center justify-between pt-4 border-t border-color">
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                         <span className="text-sm text-muted">
                           {formatDate(post.date)}
                         </span>

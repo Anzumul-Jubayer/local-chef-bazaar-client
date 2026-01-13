@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import { HiMenu, HiX, HiUser, HiHeart, HiClipboardList, HiStar, HiHome } from "react-icons/hi";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const navigationItems = [
+    { 
+      to: "", 
+      label: "Dashboard", 
+      icon: HiHome,
+      description: "Overview and analytics"
+    },
     { 
       to: "profile", 
       label: "My Profile", 
@@ -68,7 +74,7 @@ const DashboardLayout = () => {
       
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex w-80 sidebar-modern flex-col">
-        <div className="p-6 border-b border-color">
+        <div className="p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
               <HiHome className="w-5 h-5 text-primary" />
@@ -85,25 +91,45 @@ const DashboardLayout = () => {
             <NavLink
               key={item.to}
               to={item.to}
+              end={item.to === ""}
               className={({ isActive }) =>
                 `sidebar-item group ${isActive ? 'active' : ''}`
               }
             >
-              <div className="flex items-center space-x-3 flex-1">
-                <div className="p-2 rounded-lg bg-current/10 group-hover:bg-current/20 transition-colors">
-                  <item.icon className="w-4 h-4" />
+              {({ isActive }) => (
+                <div className="flex items-center space-x-3 flex-1">
+                  <div className={`p-2 rounded-lg transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-primary/20' 
+                      : 'bg-current/10 group-hover:bg-current/20'
+                  }`}>
+                    <item.icon className={`w-4 h-4 sidebar-icon transition-all duration-300 ${
+                      isActive ? 'text-primary' : ''
+                    }`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className={`font-medium transition-colors duration-300 ${
+                      isActive ? 'text-primary font-semibold' : ''
+                    }`}>
+                      {item.label}
+                    </div>
+                    <div className={`text-xs truncate transition-colors duration-300 ${
+                      isActive ? 'text-primary/70 font-medium' : 'opacity-70'
+                    }`}>
+                      {item.description}
+                    </div>
+                  </div>
+                  {isActive && (
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                  )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-medium">{item.label}</div>
-                  <div className="text-xs opacity-70 truncate">{item.description}</div>
-                </div>
-              </div>
+              )}
             </NavLink>
           ))}
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="p-6 border-t border-color">
+        <div className="p-6 border-t border-gray-200">
           <div className="card-modern p-4 bg-primary/5 border-primary/20">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
@@ -137,7 +163,7 @@ const DashboardLayout = () => {
               exit="closed"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-6 border-b border-color">
+              <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
@@ -162,25 +188,45 @@ const DashboardLayout = () => {
                   <NavLink
                     key={item.to}
                     to={item.to}
+                    end={item.to === ""}
                     onClick={() => setSidebarOpen(false)}
                     className={({ isActive }) =>
                       `sidebar-item group ${isActive ? 'active' : ''}`
                     }
                   >
-                    <div className="flex items-center space-x-3 flex-1">
-                      <div className="p-2 rounded-lg bg-current/10 group-hover:bg-current/20 transition-colors">
-                        <item.icon className="w-4 h-4" />
+                    {({ isActive }) => (
+                      <div className="flex items-center space-x-3 flex-1">
+                        <div className={`p-2 rounded-lg transition-all duration-300 ${
+                          isActive 
+                            ? 'bg-primary/20' 
+                            : 'bg-current/10 group-hover:bg-current/20'
+                        }`}>
+                          <item.icon className={`w-4 h-4 sidebar-icon transition-all duration-300 ${
+                            isActive ? 'text-primary' : ''
+                          }`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className={`font-medium transition-colors duration-300 ${
+                            isActive ? 'text-primary font-semibold' : ''
+                          }`}>
+                            {item.label}
+                          </div>
+                          <div className={`text-xs truncate transition-colors duration-300 ${
+                            isActive ? 'text-primary/70 font-medium' : 'opacity-70'
+                          }`}>
+                            {item.description}
+                          </div>
+                        </div>
+                        {isActive && (
+                          <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                        )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium">{item.label}</div>
-                        <div className="text-xs opacity-70 truncate">{item.description}</div>
-                      </div>
-                    </div>
+                    )}
                   </NavLink>
                 ))}
               </nav>
 
-              <div className="p-6 border-t border-color">
+              <div className="p-6 border-t border-gray-200">
                 <div className="card-modern p-4 bg-primary/5 border-primary/20">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
@@ -201,7 +247,7 @@ const DashboardLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Mobile Header */}
-        <div className="lg:hidden bg-surface border-b border-color p-4">
+        <div className="lg:hidden bg-surface border-b border-gray-200 p-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setSidebarOpen(true)}

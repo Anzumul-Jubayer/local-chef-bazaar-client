@@ -183,7 +183,7 @@ const Contact = () => {
                           value={formData.name}
                           onChange={handleInputChange}
                           required
-                          className="input-modern"
+                          className="w-full px-4 py-3 bg-background border-2 border-color/30 rounded-xl text-base-content font-medium placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-300"
                           placeholder="Enter your full name"
                         />
                       </div>
@@ -197,7 +197,7 @@ const Contact = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           required
-                          className="input-modern"
+                          className="w-full px-4 py-3 bg-background border-2 border-color/30 rounded-xl text-base-content font-medium placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-300"
                           placeholder="your@email.com"
                         />
                       </div>
@@ -207,18 +207,25 @@ const Contact = () => {
                       <label className="block text-sm font-medium text-base-content mb-2">
                         Category
                       </label>
-                      <select
-                        name="category"
-                        value={formData.category}
-                        onChange={handleInputChange}
-                        className="input-modern"
-                      >
-                        {supportCategories.map((category) => (
-                          <option key={category.value} value={category.value}>
-                            {category.label}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="relative">
+                        <select
+                          name="category"
+                          value={formData.category}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-background border-2 border-color/30 rounded-xl text-base-content font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-300 appearance-none cursor-pointer"
+                        >
+                          {supportCategories.map((category) => (
+                            <option key={category.value} value={category.value}>
+                              {category.label}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                          <svg className="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
 
                     <div>
@@ -231,7 +238,7 @@ const Contact = () => {
                         value={formData.subject}
                         onChange={handleInputChange}
                         required
-                        className="input-modern"
+                        className="w-full px-4 py-3 bg-background border-2 border-color/30 rounded-xl text-base-content font-medium placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-300"
                         placeholder="What's this about?"
                       />
                     </div>
@@ -246,7 +253,7 @@ const Contact = () => {
                         onChange={handleInputChange}
                         required
                         rows={6}
-                        className="input-modern resize-none"
+                        className="w-full px-4 py-4 bg-background border-2 border-color/30 rounded-xl text-base-content font-medium placeholder-muted resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-300"
                         placeholder="Tell us more about your inquiry..."
                       />
                     </div>
@@ -340,11 +347,11 @@ const Contact = () => {
                     <span>Support Hours</span>
                   </h3>
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2 border-b border-color">
+                    <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="text-base-content">Monday - Friday</span>
                       <span className="text-primary font-medium">9:00 AM - 6:00 PM EST</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-color">
+                    <div className="flex justify-between items-center py-2 border-b border-gray-200">
                       <span className="text-base-content">Saturday</span>
                       <span className="text-primary font-medium">10:00 AM - 4:00 PM EST</span>
                     </div>

@@ -260,7 +260,7 @@ const Banner = () => {
               <div className="flex items-center space-x-2">
                 <motion.button
                   onClick={prevSlide}
-                  className="p-2 bg-surface hover:bg-hover border border-color rounded-lg transition-all duration-300"
+                  className="p-2 bg-surface hover:bg-hover border border-gray-200 rounded-lg transition-all duration-300"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -269,7 +269,7 @@ const Banner = () => {
                 
                 <motion.button
                   onClick={nextSlide}
-                  className="p-2 bg-surface hover:bg-hover border border-color rounded-lg transition-all duration-300"
+                  className="p-2 bg-surface hover:bg-hover border border-gray-200 rounded-lg transition-all duration-300"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >

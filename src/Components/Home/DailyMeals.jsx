@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { HiStar, HiClock, HiLocationMarker, HiArrowRight, HiHeart } from "react-icons/hi";
 import { useLoadingState } from "../../hooks/useLoadingState";
+import { buildApiUrl } from "../../config/api";
 
 const DailyMeals = () => {
   const [meals, setMeals] = useState([]);
@@ -11,7 +12,7 @@ const DailyMeals = () => {
   const fetchMeals = async () => {
     try {
       const data = await fetchWithLoading(
-        "https://local-chef-bazaar-server-flame.vercel.app/meals?limit=6&page=1",
+        buildApiUrl("/meals?limit=6&page=1"),
         {},
         "Loading delicious meals..."
       );
@@ -116,7 +117,7 @@ const DailyMeals = () => {
         </div>
 
         {/* Price & Action */}
-        <div className="flex items-center gap-3 pt-4 border-t border-color min-h-[60px] price-container">
+        <div className="flex items-center gap-3 pt-4 border-t border-gray-200 min-h-[60px] price-container">
           <div className="flex flex-col flex-1 min-w-0">
             <div className="flex items-center">
               <span className="text-xl sm:text-2xl font-bold text-primary price-with-currency transition-all duration-200">৳{meal.price}</span>

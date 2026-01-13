@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { HiStar, HiUser, HiChat, HiTruck, HiUserGroup } from "react-icons/hi";
 import { useLoadingState } from "../../hooks/useLoadingState";
+import { buildApiUrl } from "../../config/api";
 
 const DisplayReviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -12,7 +13,7 @@ const DisplayReviews = () => {
     const loadReviews = async () => {
       try {
         const data = await fetchWithLoading(
-          "https://local-chef-bazaar-server-flame.vercel.app/reviews",
+          buildApiUrl("/reviews"),
           {},
           "Loading customer reviews..."
         );
@@ -140,7 +141,7 @@ const DisplayReviews = () => {
                             key={i}
                             className={`w-4 h-4 ${
                               i < review.rating 
-                                ? 'text-warning fill-current' 
+                                ? 'text-yellow-500 fill-current dark:text-yellow-400' 
                                 : 'text-base-300'
                             }`}
                           />

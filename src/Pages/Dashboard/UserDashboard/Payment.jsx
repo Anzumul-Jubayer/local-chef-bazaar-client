@@ -9,6 +9,7 @@ import {
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import { Helmet } from "react-helmet";
+import { buildApiUrl } from "../../../config/api";
 
 const stripePromise = loadStripe(
   "pk_test_51SVjUBGvpCLGFhd55NSrZSScTORCE1SL0t28y4XSvmiev1acqMBcyGOncMHGAFWp3Vbbtalww66Gt0jsROG65vik00ngFzctgC"
@@ -27,14 +28,11 @@ const CheckoutForm = () => {
     if (!stripe || !elements) return;
 
     try {
-      const res = await fetch(
-        "https://local-chef-bazaar-server-flame.vercel.app/create-payment-intent",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount: Math.round(Number(amount) * 100) }),
-        }
-      );
+      const res = await fetch(buildApiUrl("/create-payment-intent"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: Math.round(Number(amount) * 100) }),
+      });
 
       if (!res.ok) throw new Error("Failed to create payment intent");
       const { clientSecret } = await res.json();
@@ -56,14 +54,11 @@ const CheckoutForm = () => {
       if (paymentIntent.status === "succeeded") {
         toast.success("Payment successful!");
 
-        await fetch(
-          `https://local-chef-bazaar-server-flame.vercel.app/orders/${orderId}/payment`,
-          {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paymentInfo: paymentIntent }),
-          }
-        );
+        await fetch(buildApiUrl(`/orders/${orderId}/payment`), {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ paymentInfo: paymentIntent }),
+        });
 
         navigate("/dashboard/payment-success");
       }

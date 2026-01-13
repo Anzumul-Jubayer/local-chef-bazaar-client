@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { AuthContext } from "../Context/AuthContext";
 import LoadingPage from "../Pages/Loading/LoadingPage";
+import { buildApiUrl } from "../config/api";
 
 const ChefRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -18,7 +19,7 @@ const ChefRoute = ({ children }) => {
 
       try {
         const res = await fetch(
-          `https://local-chef-bazaar-server-flame.vercel.app/users/role/${user.email}`
+          buildApiUrl(`/users/role/${user.email}`)
         );
         const data = await res.json();
 

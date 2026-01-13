@@ -1,20 +1,21 @@
 # 🍽️ Local Chef Bazaar
 
-##  Project Purpose
+## Project Purpose
+
 Local Chef Bazaar is a food ordering platform where local chefs can sell homemade meals and users can easily order food online.  
 It connects users and chefs in a simple and friendly way.
 
 ---
 
 ## 🌐 Live Website
-Live URL: https://local-chef-bazar-a-11.netlify.app/ 
-Server :https://local-chef-bazaar-server-flame.vercel.app/
 
-
+Live URL: https://local-chef-bazar-a-11.netlify.app/
+Server :https://local-chef-bazaar-server-hazel.vercel.app/
 
 ---
 
 ## ✨ Key Features
+
 - User registration and login system
 - Role-based access (User, Chef, Admin)
 - Chefs can add, update, and delete meals
@@ -24,11 +25,12 @@ Server :https://local-chef-bazaar-server-flame.vercel.app/
 - Favorite meals system
 - Review and rating system
 
-
 ---
 
 ## 🛠️ Technologies Used
+
 ### Frontend
+
 - React
 - React Router
 - Tailwind CSS
@@ -36,14 +38,15 @@ Server :https://local-chef-bazaar-server-flame.vercel.app/
 - Firebase Authentication
 
 ### Backend
+
 - Node.js
 - Express.js
 - MongoDB
 
-
 ---
 
-##  NPM Packages Used
+## NPM Packages Used
+
 - express
 - cors
 - mongodb
@@ -54,7 +57,8 @@ Server :https://local-chef-bazaar-server-flame.vercel.app/
 
 ---
 
-##  How to Run Locally
+## How to Run Locally
+
 1. Clone the repository
 2. Run `npm install`
 3. Create a `.env` file and add environment variables
@@ -62,5 +66,3 @@ Server :https://local-chef-bazaar-server-flame.vercel.app/
 5. Run `nodemon index.js` for backend
 
 ---
-
-

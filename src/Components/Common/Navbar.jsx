@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import { AuthContext } from "../../Context/AuthContext";
 import toast from "react-hot-toast";
 import ThemeToggle from "./ThemeToggle";
+import { buildApiUrl } from "../../config/api";
 import { 
   HiMenu, 
   HiX, 
@@ -25,15 +26,68 @@ import {
   HiUserGroup,
   HiShieldCheck,
   HiArrowRight,
-  HiBookOpen
+  HiBookOpen,
+  HiSparkles
 } from "react-icons/hi";
 
 const Navbar = () => {
   const { user, signOutFunc, loading } = useContext(AuthContext);
+  const location = useLocation();
   const [role, setRole] = useState(null);
   const [roleLoading, setRoleLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [userDataKey, setUserDataKey] = useState(0); // For triggering re-renders on user data changes
+
+  // Update key when user data changes to trigger animations
+  useEffect(() => {
+    if (user) {
+      setUserDataKey(prev => prev + 1);
+    }
+  }, [user?.displayName, user?.photoURL, user]);
+
+  // Helper function to check if we're on the exact dashboard overview route
+  const isDashboardOverviewActive = (mainRoute) => {
+    // Ensure we have a valid location and mainRoute
+    if (!location?.pathname || !mainRoute) return false;
+    
+    // Check for exact match (overview route)
+    const isExactMatch = location.pathname === mainRoute;
+    
+    // Also check for trailing slash variations
+    const isExactMatchWithSlash = location.pathname === `${mainRoute}/`;
+    
+    return isExactMatch || isExactMatchWithSlash;
+  };
+
+  // Helper function to check if any child route is active
+  const isChildRouteActive = (mainRoute) => {
+    if (!location?.pathname || !mainRoute) return false;
+    
+    // Check if current path starts with mainRoute but is not the exact mainRoute
+    const isChildRoute = location.pathname.startsWith(mainRoute + '/') && 
+                        location.pathname !== mainRoute && 
+                        location.pathname !== `${mainRoute}/`;
+    
+    return isChildRoute;
+  };
+
+  // Enhanced function to determine if Dashboard Overview should be active
+  const shouldDashboardOverviewBeActive = (mainRoute) => {
+    const isOverviewRoute = isDashboardOverviewActive(mainRoute);
+    const hasActiveChild = isChildRouteActive(mainRoute);
+    
+    // Dashboard Overview is active only if we're on the exact route AND no child is active
+    return isOverviewRoute && !hasActiveChild;
+  };
+
+  // Helper function to determine if a specific child route should be active
+  const isSpecificRouteActive = (routePath) => {
+    if (!location?.pathname || !routePath) return false;
+    
+    // Check for exact match or with trailing slash
+    return location.pathname === routePath || location.pathname === `${routePath}/`;
+  };
 
   // Fetch role from backend
   useEffect(() => {
@@ -46,7 +100,7 @@ const Navbar = () => {
 
       try {
         const res = await fetch(
-          `https://local-chef-bazaar-server-flame.vercel.app/users/role/${user.email}`
+          buildApiUrl(`/users/role/${user.email}`)
         );
         const data = await res.json();
         setRole(data.role || null);
@@ -76,13 +130,50 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
+  // Enhanced navigation handler that ensures dropdown closes
+  const handleNavigation = (callback) => {
+    return (e) => {
+      // Close all menus immediately
+      setIsProfileMenuOpen(false);
+      setIsMobileMenuOpen(false);
+      
+      // Execute any additional callback
+      if (callback) {
+        callback(e);
+      }
+    };
   };
 
   const closeAllMenus = () => {
     setIsProfileMenuOpen(false);
+    setIsMobileMenuOpen(false);
   };
+
+  // Close dropdown when clicking outside or on navigation
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Close profile menu if clicking outside
+      if (isProfileMenuOpen && !event.target.closest('.profile-dropdown-container')) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape') {
+        closeAllMenus();
+      }
+    };
+
+    if (isProfileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isProfileMenuOpen]);
 
   if (loading || roleLoading) {
     return (
@@ -244,7 +335,7 @@ const Navbar = () => {
               <NavLink
                 key={link.to}
                 to={link.to}
-                onClick={closeAllMenus}
+                onClick={handleNavigation()}
                 className={({ isActive }) =>
                   `relative px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 group ${
                     isActive 
@@ -287,38 +378,42 @@ const Navbar = () => {
               <div className="flex items-center space-x-2">
                 <NavLink
                   to="/login"
+                  onClick={handleNavigation()}
                   className="btn-ghost-modern px-4 py-2 rounded-lg"
                 >
                   Login
                 </NavLink>
                 <NavLink
                   to="/register"
-                  className="btn-primary-modern"
+                  onClick={handleNavigation()}
+                  className="btn-get-started btn-get-started-pulse"
                 >
-                  Get Started
+                  <span className="relative z-2">Get Started</span>
+                  <HiSparkles className="btn-get-started-icon" />
                 </NavLink>
               </div>
             ) : (
-              <div className="relative">
+              <div className="relative profile-dropdown-container">
                 {/* Profile Dropdown Menu */}
                 <button
                   onClick={() => {
                     setIsProfileMenuOpen(!isProfileMenuOpen);
                   }}
-                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-hover transition-colors group"
+                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-hover transition-all duration-300 group"
+                  key={userDataKey} // Force re-render on user data changes
                 >
                   {user.photoURL ? (
                     <img
                       src={user.photoURL}
                       alt="Profile"
-                      className="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all"
+                      className="w-8 h-8 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 animate-fade-in navbar-profile-indicator"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-all duration-300 animate-fade-in navbar-profile-indicator">
                       <HiUser className="w-4 h-4 text-primary" />
                     </div>
                   )}
-                  <div className="hidden xl:block text-left">
+                  <div className="hidden xl:block text-left animate-fade-in">
                     <div className="text-sm font-medium text-base-content max-w-24 truncate">
                       {user.displayName || "User"}
                     </div>
@@ -333,20 +428,20 @@ const Navbar = () => {
                 {isProfileMenuOpen && (
                   <div className="absolute right-0 mt-2 w-80 card-modern p-4 animate-fade-in shadow-xl dropdown-modern">
                     {/* User Info Header */}
-                    <div className="px-3 py-4 border-b border-color">
-                      <div className="flex items-center space-x-3">
+                    <div className="px-3 py-4 border-b border-gray-200">
+                      <div className="flex items-center space-x-3" key={userDataKey}>
                         {user.photoURL ? (
                           <img
                             src={user.photoURL}
                             alt="Profile"
-                            className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
+                            className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20 animate-fade-in navbar-profile-indicator"
                           />
                         ) : (
-                          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center animate-fade-in navbar-profile-indicator">
                             <HiUser className="w-6 h-6 text-primary" />
                           </div>
                         )}
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 animate-fade-in">
                           <p className="text-sm font-semibold text-base-content truncate">
                             {user.displayName || "User"}
                           </p>
@@ -360,7 +455,7 @@ const Navbar = () => {
 
                     {/* Dashboard Section */}
                     {dashboardMenu && (
-                      <div className="py-4 border-b border-color">
+                      <div className="py-4 border-b border-gray-200">
                         <div className="flex items-center space-x-2 mb-4 px-3">
                           <dashboardMenu.icon className="w-5 h-5 text-primary" />
                           <h3 className="font-bold text-base-content">{dashboardMenu.title}</h3>
@@ -370,35 +465,39 @@ const Navbar = () => {
                         <div className="mb-4">
                           <NavLink
                             to={dashboardMenu.mainRoute}
-                            onClick={() => setIsProfileMenuOpen(false)}
-                            className={({ isActive }) =>
-                              `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group border ${
-                                isActive
+                            onClick={handleNavigation()}
+                            className={() => {
+                              const isOverviewActive = shouldDashboardOverviewBeActive(dashboardMenu.mainRoute);
+                              return `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 group border ${
+                                isOverviewActive
                                   ? "bg-gradient-to-r from-primary/15 via-primary/10 to-primary/15 border-primary/30 shadow-lg"
                                   : "bg-gradient-to-r from-primary/5 to-accent/5 hover:from-primary/10 hover:to-accent/10 border-primary/10 hover:border-primary/20"
-                              }`
-                            }
+                              }`;
+                            }}
                           >
-                            {({ isActive }) => (
-                              <>
-                                <div className={`p-2 rounded-lg transition-colors ${
-                                  isActive ? "bg-primary/25" : "bg-primary/15 group-hover:bg-primary/25"
-                                }`}>
-                                  <HiViewGrid className={`w-5 h-5 transition-all duration-300 ${
-                                    isActive ? "text-primary scale-110" : "text-primary"
+                            {() => {
+                              const isOverviewActive = shouldDashboardOverviewBeActive(dashboardMenu.mainRoute);
+                              return (
+                                <>
+                                  <div className={`p-2 rounded-lg transition-colors ${
+                                    isOverviewActive ? "bg-primary/25" : "bg-primary/15 group-hover:bg-primary/25"
+                                  }`}>
+                                    <HiViewGrid className={`w-5 h-5 transition-all duration-300 ${
+                                      isOverviewActive ? "text-primary scale-110" : "text-primary"
+                                    }`} />
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className={`font-semibold transition-colors ${
+                                      isOverviewActive ? "text-primary" : "text-base-content"
+                                    }`}>Dashboard Overview</div>
+                                    <div className="text-xs text-muted">Main dashboard</div>
+                                  </div>
+                                  <HiArrowRight className={`w-4 h-4 text-primary transition-all duration-300 ${
+                                    isOverviewActive ? "opacity-100 translate-x-1" : "opacity-0 group-hover:opacity-100"
                                   }`} />
-                                </div>
-                                <div className="flex-1">
-                                  <div className={`font-semibold transition-colors ${
-                                    isActive ? "text-primary" : "text-base-content"
-                                  }`}>Dashboard Overview</div>
-                                  <div className="text-xs text-muted">Main dashboard</div>
-                                </div>
-                                <HiArrowRight className={`w-4 h-4 text-primary transition-all duration-300 ${
-                                  isActive ? "opacity-100 translate-x-1" : "opacity-0 group-hover:opacity-100"
-                                }`} />
-                              </>
-                            )}
+                                </>
+                              );
+                            }}
                           </NavLink>
                         </div>
 
@@ -418,45 +517,49 @@ const Navbar = () => {
                                   <NavLink
                                     key={item.to}
                                     to={item.to}
-                                    onClick={() => setIsProfileMenuOpen(false)}
-                                    className={({ isActive }) =>
-                                      `menu-item-modern flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-all duration-300 group ${
-                                        isActive
+                                    onClick={handleNavigation()}
+                                    className={() => {
+                                      const isRouteActive = isSpecificRouteActive(item.to);
+                                      return `menu-item-modern flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-all duration-300 group ${
+                                        isRouteActive
                                           ? "bg-gradient-to-r from-primary/15 to-accent/15 text-primary font-semibold border border-primary/20 shadow-md"
                                           : "text-base-content hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 hover:text-primary"
-                                      }`
-                                    }
+                                      }`;
+                                    }}
                                   >
-                                    {({ isActive }) => (
-                                      <>
-                                        <div className={`p-1.5 rounded-lg transition-colors ${
-                                          isActive 
-                                            ? "bg-primary/20" 
-                                            : "bg-base-300 group-hover:bg-primary/10"
-                                        }`}>
-                                          <item.icon className={`w-4 h-4 transition-all duration-300 ${
-                                            isActive 
-                                              ? "text-primary scale-110" 
-                                              : "text-muted group-hover:text-primary"
-                                          }`} />
-                                        </div>
-                                        <div className="flex-1">
-                                          <div className={`font-medium transition-colors ${
-                                            isActive ? "text-primary" : ""
-                                          }`}>{item.label}</div>
-                                          <div className={`text-xs text-muted transition-opacity ${
-                                            isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                                    {() => {
+                                      const isRouteActive = isSpecificRouteActive(item.to);
+                                      return (
+                                        <>
+                                          <div className={`p-1.5 rounded-lg transition-colors ${
+                                            isRouteActive 
+                                              ? "bg-primary/20" 
+                                              : "bg-base-300 group-hover:bg-primary/10"
                                           }`}>
-                                            {getItemDescription(item.label)}
+                                            <item.icon className={`w-4 h-4 transition-all duration-300 ${
+                                              isRouteActive 
+                                                ? "text-primary scale-110" 
+                                                : "text-muted group-hover:text-primary"
+                                            }`} />
                                           </div>
-                                        </div>
-                                        <HiChevronDown className={`w-3 h-3 text-muted rotate-[-90deg] transition-all duration-300 ${
-                                          isActive 
-                                            ? "opacity-100 text-primary" 
-                                            : "opacity-0 group-hover:opacity-100"
-                                        }`} />
-                                      </>
-                                    )}
+                                          <div className="flex-1">
+                                            <div className={`font-medium transition-colors ${
+                                              isRouteActive ? "text-primary" : ""
+                                            }`}>{item.label}</div>
+                                            <div className={`text-xs text-muted transition-opacity ${
+                                              isRouteActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                                            }`}>
+                                              {getItemDescription(item.label)}
+                                            </div>
+                                          </div>
+                                          <HiChevronDown className={`w-3 h-3 text-muted rotate-[-90deg] transition-all duration-300 ${
+                                            isRouteActive 
+                                              ? "opacity-100 text-primary" 
+                                              : "opacity-0 group-hover:opacity-100"
+                                          }`} />
+                                        </>
+                                      );
+                                    }}
                                   </NavLink>
                                 ))}
                               </div>
@@ -511,7 +614,7 @@ const Navbar = () => {
                   <NavLink
                     key={link.to}
                     to={link.to}
-                    onClick={closeMobileMenu}
+                    onClick={handleNavigation()}
                     className={({ isActive }) =>
                       `relative flex items-center space-x-3 px-4 py-3 rounded-xl font-medium transition-all duration-300 group ${
                         isActive
@@ -547,40 +650,41 @@ const Navbar = () => {
               </div>
 
               {/* Mobile Auth Section */}
-              <div className="border-t border-color pt-4">
+              <div className="border-t border-gray-200 pt-4">
                 {!user ? (
                   <div className="space-y-2">
                     <NavLink
                       to="/login"
-                      onClick={closeMobileMenu}
+                      onClick={handleNavigation()}
                       className="block w-full btn-ghost-modern text-center py-3 rounded-lg"
                     >
                       Login
                     </NavLink>
                     <NavLink
                       to="/register"
-                      onClick={closeMobileMenu}
-                      className="block w-full btn-primary-modern text-center py-3 rounded-lg"
+                      onClick={handleNavigation()}
+                      className="btn-get-started btn-get-started-pulse w-full justify-center py-3 rounded-lg"
                     >
-                      Get Started
+                      <span className="relative z-2">Get Started</span>
+                      <HiSparkles className="btn-get-started-icon" />
                     </NavLink>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {/* Mobile User Info */}
-                    <div className="flex items-center space-x-3 px-4 py-3 bg-surface-elevated rounded-lg">
+                    <div className="flex items-center space-x-3 px-4 py-3 bg-surface-elevated rounded-lg" key={userDataKey}>
                       {user.photoURL ? (
                         <img
                           src={user.photoURL}
                           alt="Profile"
-                          className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+                          className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 animate-fade-in"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center animate-fade-in">
                           <HiUser className="w-5 h-5 text-primary" />
                         </div>
                       )}
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 animate-fade-in">
                         <p className="text-sm font-medium text-base-content truncate">
                           {user.displayName || "User"}
                         </p>
@@ -604,28 +708,32 @@ const Navbar = () => {
                         {/* Main Dashboard Link */}
                         <NavLink
                           to={dashboardMenu.mainRoute}
-                          onClick={closeMobileMenu}
-                          className={({ isActive }) =>
-                            `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 mb-4 ${
-                              isActive
+                          onClick={handleNavigation()}
+                          className={() => {
+                            const isOverviewActive = shouldDashboardOverviewBeActive(dashboardMenu.mainRoute);
+                            return `flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 mb-4 ${
+                              isOverviewActive
                                 ? "bg-gradient-to-r from-primary/15 via-primary/10 to-primary/15 border border-primary/20 shadow-lg"
                                 : "bg-primary/5 hover:bg-primary/10"
-                            }`
-                          }
+                            }`;
+                          }}
                         >
-                          {({ isActive }) => (
-                            <>
-                              <HiViewGrid className={`w-5 h-5 transition-all duration-300 ${
-                                isActive ? "text-primary scale-110" : "text-primary"
-                              }`} />
-                              <div>
-                                <div className={`font-semibold transition-colors ${
-                                  isActive ? "text-primary" : "text-base-content"
-                                }`}>Dashboard Overview</div>
-                                <div className="text-xs text-muted">Main dashboard</div>
-                              </div>
-                            </>
-                          )}
+                          {() => {
+                            const isOverviewActive = shouldDashboardOverviewBeActive(dashboardMenu.mainRoute);
+                            return (
+                              <>
+                                <HiViewGrid className={`w-5 h-5 transition-all duration-300 ${
+                                  isOverviewActive ? "text-primary scale-110" : "text-primary"
+                                }`} />
+                                <div>
+                                  <div className={`font-semibold transition-colors ${
+                                    isOverviewActive ? "text-primary" : "text-base-content"
+                                  }`}>Dashboard Overview</div>
+                                  <div className="text-xs text-muted">Main dashboard</div>
+                                </div>
+                              </>
+                            );
+                          }}
                         </NavLink>
 
                         {/* Dashboard Menu Items */}
@@ -644,28 +752,32 @@ const Navbar = () => {
                                   <NavLink
                                     key={item.to}
                                     to={item.to}
-                                    onClick={closeMobileMenu}
-                                    className={({ isActive }) =>
-                                      `flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-all duration-300 ${
-                                        isActive
+                                    onClick={handleNavigation()}
+                                    className={() => {
+                                      const isRouteActive = isSpecificRouteActive(item.to);
+                                      return `flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-all duration-300 ${
+                                        isRouteActive
                                           ? "bg-gradient-to-r from-primary/15 to-accent/15 text-primary font-semibold border border-primary/20 shadow-md"
                                           : "text-base-content hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/5 hover:text-primary"
-                                      }`
-                                    }
+                                      }`;
+                                    }}
                                   >
-                                    {({ isActive }) => (
-                                      <>
-                                        <item.icon className={`w-4 h-4 transition-all duration-300 ${
-                                          isActive ? "text-primary scale-110" : "text-muted"
-                                        }`} />
-                                        <div>
-                                          <div className={`font-medium transition-colors ${
-                                            isActive ? "text-primary" : ""
-                                          }`}>{item.label}</div>
-                                          <div className="text-xs text-muted">{getItemDescription(item.label)}</div>
-                                        </div>
-                                      </>
-                                    )}
+                                    {() => {
+                                      const isRouteActive = isSpecificRouteActive(item.to);
+                                      return (
+                                        <>
+                                          <item.icon className={`w-4 h-4 transition-all duration-300 ${
+                                            isRouteActive ? "text-primary scale-110" : "text-muted"
+                                          }`} />
+                                          <div>
+                                            <div className={`font-medium transition-colors ${
+                                              isRouteActive ? "text-primary" : ""
+                                            }`}>{item.label}</div>
+                                            <div className="text-xs text-muted">{getItemDescription(item.label)}</div>
+                                          </div>
+                                        </>
+                                      );
+                                    }}
                                   </NavLink>
                                 ))}
                               </div>
@@ -689,14 +801,6 @@ const Navbar = () => {
           </div>
         )}
       </div>
-
-      {/* Click outside to close menus */}
-      {isProfileMenuOpen && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={closeAllMenus}
-        />
-      )}
     </nav>
   );
 };

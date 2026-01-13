@@ -68,7 +68,7 @@ const ThemeToggle = () => {
       </div>
       
       {/* Tooltip */}
-      <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-surface-elevated border border-color rounded-lg text-xs text-base-content opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+      <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-surface-elevated border border-gray-200 rounded-lg text-xs text-base-content opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
         {theme === 'light' ? 'Dark mode' : 'Light mode'}
       </div>
     </button>
