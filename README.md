@@ -9,7 +9,7 @@ It connects users and chefs in a simple and friendly way.
 
 ## 🌐 Live Website
 
-Live URL: https://local-chef-bazar.surge.sh/
+Live URL: https://local-chef-bazar-a-11.netlify.app/
 Server: https://local-chef-bazaar-server-1sfi4xc2o-anzumul-jubayers-projects.vercel.app/
 
 ---
@@ -34,6 +34,7 @@ Server: https://local-chef-bazaar-server-1sfi4xc2o-anzumul-jubayers-projects.ver
 - Admin can manage users and role requests
 - Favorite meals system
 - Review and rating system
+- Integrated Stripe Payment Gateway 
 
 ---
 
@@ -52,6 +53,7 @@ Server: https://local-chef-bazaar-server-1sfi4xc2o-anzumul-jubayers-projects.ver
 - Node.js
 - Express.js
 - MongoDB
+- stripe
 
 ---
 
